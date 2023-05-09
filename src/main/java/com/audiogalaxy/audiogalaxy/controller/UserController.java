@@ -22,7 +22,7 @@ public class UserController {
 
 
     /**
-     * POSt /auth/users/register/
+     * POST /auth/users/register/
      * Calls method to create a registered user
      * @param user
      * @return
