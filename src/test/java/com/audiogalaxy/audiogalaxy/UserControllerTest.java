@@ -79,7 +79,7 @@ public class UserControllerTest {
                 .andDo(print());
     }
 
-    @Test
+   @Test
     public void requestBodyPasswordCanNotBeBlank() throws Exception {
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -93,7 +93,19 @@ public class UserControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    public void requestBodyPasswordMustBe6Characters() throws Exception {
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(new User("Pam", "pam@gmail.com", "123456")));
 
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$").value("The password must contain 6 characters"))
+                .andDo(print());
+    }
 
 
 

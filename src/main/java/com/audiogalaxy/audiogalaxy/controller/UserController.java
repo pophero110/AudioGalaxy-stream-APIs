@@ -23,6 +23,9 @@ public class UserController {
         if(user.getPassword().isBlank()) {
             return new ResponseEntity<>("The password can not be empty or contain spaces", HttpStatus.BAD_REQUEST);
         }
+        if(user.getPassword().length() > 5) {
+            return new ResponseEntity<>("The password must contain 6 characters", HttpStatus.BAD_REQUEST);
+        }
 
 
         return new ResponseEntity<>(null, HttpStatus.OK);
