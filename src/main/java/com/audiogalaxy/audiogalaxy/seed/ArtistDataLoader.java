@@ -26,10 +26,9 @@ public class ArtistDataLoader implements CommandLineRunner {
             Artist artist5 = new Artist("SZA");
             Artist artist6 = new Artist("The Weekend");
             Artist artist7 = new Artist("Drake");
-            Artist artist8 = new Artist("Peso Pluma");
-            Artist artist9 = new Artist("Milley Cyrus");
-            Artist artist10 = new Artist("Metallica");
-            Artist artist11 = new Artist("Ed Sheeran");
+            Artist artist8 = new Artist("Milley Cyrus");
+            Artist artist9 = new Artist("Metallica");
+            Artist artist10 = new Artist("Ed Sheeran");
             artistRepository.save(artist1);
             artistRepository.save(artist2);
             artistRepository.save(artist3);
