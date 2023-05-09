@@ -2,12 +2,19 @@ package com.audiogalaxy.audiogalaxy;
 
 import com.audiogalaxy.audiogalaxy.controller.UserController;
 import com.audiogalaxy.audiogalaxy.model.User;
+import com.audiogalaxy.audiogalaxy.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.path.json.JsonPath;
+import org.h2.command.dml.MergeUsing;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -15,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.Random;
 
 import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -28,9 +36,18 @@ public class UserControllerTest {
     @Autowired
     ObjectMapper mapper;
 
+    @MockBean
+    private UserService userService;
+
+
     @Test
-    public void shouldReturn200() throws Exception {
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users");
+    public void createUserSuccessfully() throws Exception {
+        when(userService.createUser(Mockito.any(User.class)))
+                .thenReturn(new ResponseEntity<>(null, HttpStatus.OK));
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(new User("Pam", "pam@gmail.com", "123456")));
 
             mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
@@ -41,7 +58,7 @@ public class UserControllerTest {
     @Test
     public void requestBodyShouldNotBeEmpty() throws Exception {
 
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users");
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users/");
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isBadRequest())
@@ -52,7 +69,7 @@ public class UserControllerTest {
 
     @Test
     public void requestBodyUserNameCanNotBeBlank() throws Exception {
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users")
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(new User("", "hello@email.com", "1,2,3")));
@@ -67,7 +84,7 @@ public class UserControllerTest {
 
     @Test
     public void requestBodyEmailCanNotBeBlank() throws Exception {
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users")
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(new User("Pam", "", "1,2,3")));
@@ -81,7 +98,7 @@ public class UserControllerTest {
 
    @Test
     public void requestBodyPasswordCanNotBeBlank() throws Exception {
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users")
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(new User("Pam", "pam@gmail.com", "")));
@@ -95,7 +112,7 @@ public class UserControllerTest {
 
     @Test
     public void requestBodyPasswordMustBe6Characters() throws Exception {
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users")
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(new User("Pam", "pam@gmail.com", "123456")));
