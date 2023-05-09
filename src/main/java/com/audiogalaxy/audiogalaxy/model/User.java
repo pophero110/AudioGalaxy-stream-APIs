@@ -22,13 +22,13 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    private Boolean isActive;
+    private boolean isActive;
 
 
     public User() {
     }
 
-    public User(Long id, String username, String email, String password, Boolean isActive) {
+    public User(Long id, String username, String email, String password, boolean isActive) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -72,7 +72,7 @@ public class User {
         return isActive;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(boolean active) {
         isActive = active;
     }
 
