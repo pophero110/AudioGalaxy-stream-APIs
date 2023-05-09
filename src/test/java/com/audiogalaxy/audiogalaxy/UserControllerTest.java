@@ -1,25 +1,20 @@
 package com.audiogalaxy.audiogalaxy;
 
 import com.audiogalaxy.audiogalaxy.controller.UserController;
+import com.audiogalaxy.audiogalaxy.exception.InformationInvalidException;
 import com.audiogalaxy.audiogalaxy.model.User;
 import com.audiogalaxy.audiogalaxy.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.restassured.path.json.JsonPath;
-import org.h2.command.dml.MergeUsing;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.util.Random;
 
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.when;
@@ -39,91 +34,66 @@ public class UserControllerTest {
     @MockBean
     private UserService userService;
 
+    private final String endpoint = "/api/users/";
+
+    User user_1 = new User("Pam", "pam@gmail.com", "123456");
 
     @Test
+    @DisplayName("create an user successfully")
     public void createUserSuccessfully() throws Exception {
-        when(userService.createUser(Mockito.any(User.class)))
-                .thenReturn(new ResponseEntity<>(null, HttpStatus.OK));
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                                .accept(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(new User("Pam", "pam@gmail.com", "123456")));
+        when(userService.createUser(Mockito.any(User.class))).thenReturn(user_1);
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post(endpoint).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(user_1));
 
-            mockMvc.perform(mockRequest)
-                .andExpect(status().isOk())
+        mockMvc.perform(mockRequest).andExpect(status().isOk()).andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.name").value(user_1.getName()))
+                .andExpect(jsonPath("$.email").value(user_1.getEmail()))
+                // should not include password in the response
+                .andExpect(jsonPath("$.password").doesNotExist())
                 .andDo(print());
-
     }
 
     @Test
+    @DisplayName("request body should not be empty")
     public void requestBodyShouldNotBeEmpty() throws Exception {
-
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users/");
-
-        mockMvc.perform(mockRequest)
-                .andExpect(status().isBadRequest())
-                .andDo(print());
-    }
-
-
-
-    @Test
-    public void requestBodyUserNameCanNotBeBlank() throws Exception {
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(new User("", "hello@email.com", "1,2,3")));
-
-        mockMvc.perform(mockRequest)
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$").value("The username can not be empty or contain spaces"))
-                .andDo(print());
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post(endpoint);
+        mockMvc.perform(mockRequest).andExpect(status().isBadRequest()).andDo(print());
     }
 
 
     @Test
-    public void requestBodyEmailCanNotBeBlank() throws Exception {
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(new User("Pam", "", "1,2,3")));
+    @DisplayName("user name can not be blank")
+    public void userNameCanNotBeBlank() throws Exception {
+        when(userService.createUser(Mockito.any(User.class))).thenThrow(new InformationInvalidException("The username can not be empty or contain spaces"));
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post(endpoint).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(new User("", "hello@email.com", "1,2,3")));
 
-        mockMvc.perform(mockRequest)
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$").value("The email can not be empty or contain spaces"))
-                .andDo(print());
+        mockMvc.perform(mockRequest).andExpect(status().isBadRequest()).andDo(print());
     }
 
-   @Test
-    public void requestBodyPasswordCanNotBeBlank() throws Exception {
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(new User("Pam", "pam@gmail.com", "")));
 
-        mockMvc.perform(mockRequest)
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$").value("The password can not be empty or contain spaces"))
-                .andDo(print());
+    @Test
+    @DisplayName("email can not be blank")
+    public void emailCanNotBeBlank() throws Exception {
+        when(userService.createUser(Mockito.any(User.class))).thenThrow(new InformationInvalidException("The email can not be empty or contain spaces"));
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post(endpoint).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(new User("Pam", "", "1,2,3")));
+
+        mockMvc.perform(mockRequest).andExpect(status().isBadRequest()).andDo(print());
     }
 
     @Test
-    public void requestBodyPasswordMustBe6Characters() throws Exception {
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(new User("Pam", "pam@gmail.com", "123456")));
+    @DisplayName("password can not be blank")
+    public void passwordCanNotBeBlank() throws Exception {
+        when(userService.createUser(Mockito.any(User.class))).thenThrow(new InformationInvalidException("The password can not be empty or contain spaces"));
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post(endpoint).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(new User("Pam", "pam@gmail.com", "")));
 
-        mockMvc.perform(mockRequest)
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$").value("The password must contain 6 characters"))
-                .andDo(print());
+        mockMvc.perform(mockRequest).andExpect(status().isBadRequest()).andDo(print());
     }
 
+    @Test
+    @DisplayName("password must have at least 6 characters")
+    public void passwordMustHaveAtLeast6Characters() throws Exception {
+        when(userService.createUser(Mockito.any(User.class))).thenThrow(new InformationInvalidException("The password must contain 6 characters"));
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post(endpoint).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(new User("Pam", "pam@gmail.com", "12345")));
 
-
+        mockMvc.perform(mockRequest).andExpect(status().isBadRequest()).andDo(print());
+    }
 }
