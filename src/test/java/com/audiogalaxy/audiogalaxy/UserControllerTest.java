@@ -79,5 +79,22 @@ public class UserControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    public void requestBodyPasswordCanNotBeBlank() throws Exception {
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(new User("Pam", "pam@gmail.com", "")));
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$").value("The password can not be empty or contain spaces"))
+                .andDo(print());
+    }
+
+
+
+
 
 }
