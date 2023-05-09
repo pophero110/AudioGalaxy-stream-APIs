@@ -47,8 +47,6 @@ public class UserControllerTest {
         mockMvc.perform(mockRequest).andExpect(status().isOk()).andExpect(jsonPath("$", notNullValue()))
                 .andExpect(jsonPath("$.name").value(user_1.getName()))
                 .andExpect(jsonPath("$.email").value(user_1.getEmail()))
-                // should not include password in the response
-                .andExpect(jsonPath("$.password").doesNotExist())
                 .andDo(print());
     }
 

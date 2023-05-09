@@ -4,8 +4,6 @@ import com.audiogalaxy.audiogalaxy.exception.InformationInvalidException;
 import com.audiogalaxy.audiogalaxy.model.User;
 import com.audiogalaxy.audiogalaxy.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service

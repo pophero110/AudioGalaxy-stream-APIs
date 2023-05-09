@@ -8,10 +8,10 @@
 		<version>2.7.8</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+	<name>audiogalaxy</name>
 	<groupId>com.audiogalaxy</groupId>
 	<artifactId>audiogalaxy</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>audiogalaxy</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
@@ -68,12 +68,12 @@
 <!--			<version>${cucumber.version}</version>-->
 <!--			<scope>test</scope>-->
 <!--		</dependency>-->
-		<dependency>
-			<groupId>io.rest-assured</groupId>
-			<artifactId>rest-assured</artifactId>
-			<version>4.3.0</version>
-			<scope>test</scope>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>io.rest-assured</groupId>-->
+<!--			<artifactId>rest-assured</artifactId>-->
+<!--			<version>4.3.0</version>-->
+<!--			<scope>test</scope>-->
+<!--		</dependency>-->
 	</dependencies>
 
 	<build>

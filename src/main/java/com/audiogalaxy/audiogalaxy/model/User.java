@@ -1,8 +1,9 @@
 package com.audiogalaxy.audiogalaxy.model;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+
 
 @Entity
 @Table(name = "users")
@@ -15,32 +16,35 @@ public class User {
     @Column
     private String name;
 
-    @Column
+    @Column(unique = true)
     private String email;
 
     @Column
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @JsonIgnore
     private String password;
 
+
     public User() {
+    }
+
+    public User(String username, String email, String password) {
+        this.name = username;
+        this.email = email;
+        this.password = password;
     }
 
     public String getName() {
         return name;
     }
 
+
     public String getEmail() {
         return email;
     }
 
+
     public String getPassword() {
         return password;
-    }
-
-    public User(String name, String email, String password) {
-
-        this.name = name;
-        this.email = email;
-        this.password = password;
     }
 }
