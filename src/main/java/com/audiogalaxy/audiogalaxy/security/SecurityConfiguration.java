@@ -44,10 +44,14 @@ public class SecurityConfiguration {
         http.authorizeRequests().antMatchers(
                         "/api/users/"
                 ).permitAll()
+                .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().csrf().disable();
+
+        // Configure H2 Console
+        http.headers().frameOptions().sameOrigin();
         http.addFilterBefore(authJwtRequestFilter(), UsernamePasswordAuthenticationFilter.class); // added for JWT login
         return http.build();
     }

@@ -1,8 +1,9 @@
 package com.audiogalaxy.audiogalaxy.model;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
 
 
 @Entity
@@ -23,6 +24,8 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @OneToMany(mappedBy = "user")
+    private List<Playlist> playlists;
 
     public User() {
     }
