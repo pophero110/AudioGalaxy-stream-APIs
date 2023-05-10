@@ -1,6 +1,7 @@
 package com.audiogalaxy.audiogalaxy;
 
 import com.audiogalaxy.audiogalaxy.controller.PlaylistController;
+import com.audiogalaxy.audiogalaxy.exception.InformationInvalidException;
 import com.audiogalaxy.audiogalaxy.model.Playlist;
 import com.audiogalaxy.audiogalaxy.service.PlaylistService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,6 +49,22 @@ public class PlaylistControllerTest {
                 .andExpect(jsonPath("$", notNullValue()))
                 .andExpect(jsonPath("$.name").value(playlist.getName()))
                 .andExpect(jsonPath("$.description").value(playlist.getDescription()))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("should return 400 when the name of the playlist is blank")
+    public void shouldCreatePlaylistNotSuccessfully() throws Exception {
+        Playlist playlistWithBlankName = new Playlist("", "my favorite rock musics");
+        when(playlistService.createPlayList(Mockito.any(Playlist.class)))
+                .thenThrow(new InformationInvalidException("The name of playlist can not empty or contains only space"));
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/playlists/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(playlistWithBlankName));
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isBadRequest())
                 .andDo(print());
     }
 }
