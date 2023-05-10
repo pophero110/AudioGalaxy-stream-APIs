@@ -3,33 +3,34 @@ package com.audiogalaxy.audiogalaxy;
 import com.audiogalaxy.audiogalaxy.controller.UserController;
 import com.audiogalaxy.audiogalaxy.exception.InformationInvalidException;
 import com.audiogalaxy.audiogalaxy.model.User;
-import com.audiogalaxy.audiogalaxy.model.request.LoginRequest;
 import com.audiogalaxy.audiogalaxy.security.JWTUtils;
-import com.audiogalaxy.audiogalaxy.security.JwtRequestFilter;
 import com.audiogalaxy.audiogalaxy.security.MyUserDetailsService;
+import com.audiogalaxy.audiogalaxy.security.SecurityConfiguration;
 import com.audiogalaxy.audiogalaxy.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
+@AutoConfigureMockMvc
+@Import(SecurityConfiguration.class)
 public class UserControllerTest {
 
     @Autowired
@@ -43,6 +44,7 @@ public class UserControllerTest {
 
     @MockBean
     private MyUserDetailsService myUserDetailsService;
+
     @MockBean
     private JWTUtils jwtUtils;
 
@@ -54,9 +56,14 @@ public class UserControllerTest {
     @DisplayName("return 200 and User Object")
     public void createUserSuccessfully() throws Exception {
         when(userService.createUser(Mockito.any(User.class))).thenReturn(user_1);
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post(endpoint).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(user_1));
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post(endpoint)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(user_1));
 
-        mockMvc.perform(mockRequest).andExpect(status().isOk()).andExpect(jsonPath("$", notNullValue()))
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", notNullValue()))
                 .andExpect(jsonPath("$.name").value(user_1.getName()))
                 .andExpect(jsonPath("$.email").value(user_1.getEmail()))
                 .andDo(print());

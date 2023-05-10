@@ -43,7 +43,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(
                         "/api/users/",
-                        "/auth/users/login/"
+                        "/api/users/login/"
                 ).permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement()
