@@ -50,14 +50,14 @@ public class UserService {
         if(userObject.getPassword().length() < 5) {
             throw new InformationInvalidException("The password must contain 6 characters");
         }
-
+        //It converts the password to a jwt token
         userObject.setPassword(passwordEncoder.encode(userObject.getPassword()));
 
         return userRepository.save(userObject);
     }
 
     public User findUserByEmailAddress(String email) {
-        return new User();
+        return userRepository.findByEmail(email);
     }
 
 }
