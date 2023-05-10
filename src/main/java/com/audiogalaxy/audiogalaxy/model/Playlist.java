@@ -15,4 +15,21 @@ public class Playlist {
 
     @Column
     private String description;
+
+    public Playlist() {
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Playlist(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }
