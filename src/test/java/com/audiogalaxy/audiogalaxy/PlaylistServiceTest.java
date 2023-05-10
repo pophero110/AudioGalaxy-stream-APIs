@@ -5,6 +5,7 @@ import com.audiogalaxy.audiogalaxy.model.Playlist;
 import com.audiogalaxy.audiogalaxy.repository.PlaylistRepository;
 import com.audiogalaxy.audiogalaxy.service.PlaylistService;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -39,10 +40,10 @@ public class PlaylistServiceTest {
 
         // Assert
         // createPlaylist return a playlist
-        Assert.assertNotNull(createdPlaylist);
+        Assertions.assertNotNull(createdPlaylist);
         // the createdPlaylist have the same data as the newPlaylist
-        Assert.assertEquals(newPlaylist.getName(), createdPlaylist.getName());
-        Assert.assertEquals(newPlaylist.getDescription(), createdPlaylist.getDescription());
+        Assertions.assertEquals(newPlaylist.getName(), createdPlaylist.getName());
+        Assertions.assertEquals(newPlaylist.getDescription(), createdPlaylist.getDescription());
 
         // createPlaylist method should only invoke the save method on playlistRepository once
         verify(playlistRepository, times(1)).save(Mockito.any(Playlist.class));
