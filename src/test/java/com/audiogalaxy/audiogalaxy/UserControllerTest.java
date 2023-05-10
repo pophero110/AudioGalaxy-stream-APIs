@@ -94,4 +94,5 @@ public class UserControllerTest {
 
         mockMvc.perform(mockRequest).andExpect(status().isBadRequest()).andDo(print());
     }
+
 }

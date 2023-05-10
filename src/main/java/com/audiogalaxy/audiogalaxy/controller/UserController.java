@@ -1,8 +1,10 @@
 package com.audiogalaxy.audiogalaxy.controller;
 
 import com.audiogalaxy.audiogalaxy.model.User;
+import com.audiogalaxy.audiogalaxy.model.request.LoginRequest;
 import com.audiogalaxy.audiogalaxy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -28,4 +30,9 @@ public class UserController {
     public User registerUser(@RequestBody User user) {
         return userService.createUser(user);
     }
+
+//    @PostMapping(path="/users/login")
+//    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
+////        return userService.loginUser(loginRequest);
+//    }
 }
