@@ -21,7 +21,6 @@ public class User {
 
     @Column
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @JsonIgnore
     private String password;
 
 
@@ -46,5 +45,10 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
