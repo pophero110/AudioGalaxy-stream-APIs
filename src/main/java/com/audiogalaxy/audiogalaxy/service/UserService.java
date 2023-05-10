@@ -2,12 +2,18 @@ package com.audiogalaxy.audiogalaxy.service;
 
 import com.audiogalaxy.audiogalaxy.exception.InformationInvalidException;
 import com.audiogalaxy.audiogalaxy.model.User;
+import com.audiogalaxy.audiogalaxy.model.request.LoginRequest;
+import com.audiogalaxy.audiogalaxy.model.response.LoginResponse;
 import com.audiogalaxy.audiogalaxy.repository.UserRepository;
 import com.audiogalaxy.audiogalaxy.security.JWTUtils;
 import com.audiogalaxy.audiogalaxy.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +64,24 @@ public class UserService {
 
     public User findUserByEmailAddress(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    /**
+     * Method handles login user authentication.
+     * @param loginRequest Of type LoginRequest class/object
+     * @return A generic type of ResponseEntity in order  to configure the HTTP response.
+     */
+    public ResponseEntity<?> loginUser(LoginRequest loginRequest) {
+        try {
+            Authentication authentication = authenticationManager.authenticate( new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            myUserDetails = (MyUserDetails) authentication.getPrincipal();
+            // generate token
+            final String JWT = jwtUtils.generateJwtToken(myUserDetails);
+            return ResponseEntity.ok(new LoginResponse(JWT));
+        } catch (Exception e) {
+            return ResponseEntity.ok(new LoginResponse("Error:  username or password is incorrect."));
+        }
     }
 
 }

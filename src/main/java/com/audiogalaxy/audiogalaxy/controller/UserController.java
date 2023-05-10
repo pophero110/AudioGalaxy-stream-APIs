@@ -31,8 +31,8 @@ public class UserController {
         return userService.createUser(user);
     }
 
-//    @PostMapping(path="/users/login")
-//    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
-////        return userService.loginUser(loginRequest);
-//    }
+    @PostMapping(path="/users/login/")
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
+        return userService.loginUser(loginRequest);
+    }
 }
