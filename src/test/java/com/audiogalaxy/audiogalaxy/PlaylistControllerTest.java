@@ -38,12 +38,17 @@ public class PlaylistControllerTest {
     @Test
     @DisplayName("should return 200 and a playlist object")
     public void shouldCreatePlaylistSuccessfully() throws Exception {
+        // Arrange
+        // mock createPlaylist method to return a playlist
         when(playlistService.createPlayList(Mockito.any(Playlist.class))).thenReturn(playlist);
+
+        // mock the POST request for creating a playlist
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/playlists/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(playlist));
 
+        // Act & Assert
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()))
@@ -55,7 +60,9 @@ public class PlaylistControllerTest {
     @Test
     @DisplayName("should return 400 when the name of the playlist is blank")
     public void shouldCreatePlaylistNotSuccessfully() throws Exception {
+        // Arrange
         Playlist playlistWithBlankName = new Playlist("", "my favorite rock musics");
+        // mock createPlaylist method to throw a exception
         when(playlistService.createPlayList(Mockito.any(Playlist.class)))
                 .thenThrow(new InformationInvalidException("The name of playlist can not empty or contains only space"));
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/playlists/")
@@ -63,6 +70,7 @@ public class PlaylistControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(playlistWithBlankName));
 
+        // Act & Assert
         mockMvc.perform(mockRequest)
                 .andExpect(status().isBadRequest())
                 .andDo(print());
