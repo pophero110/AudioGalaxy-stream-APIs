@@ -35,13 +35,13 @@ public class UserService {
         this.authenticationManager = authenticationManager;
         this.myUserDetails = myUserDetails;
     }
+
     /**
      * This is the method that will create user, validates email, password and password length.
      * Checks to make sure the name, email & password can not be blank.
      * @param userObject contain require data.  Is used for creating user.
      * @return returns responseEntity status 200 & 400.
      */
-
     public User createUser (User userObject){
         if(userObject.getName().isBlank()){
             throw new InformationInvalidException("The username can not be empty or contain spaces");
@@ -84,5 +84,4 @@ public class UserService {
             throw new InformationInvalidException("Error:  user email or password is incorrect.");
         }
     }
-
 }
