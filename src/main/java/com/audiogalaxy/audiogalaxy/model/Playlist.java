@@ -29,6 +29,12 @@ public class Playlist {
         this.description = description;
     }
 
+    public Playlist(String name, String description, User user) {
+        this.name = name;
+        this.description = description;
+        this.user = user;
+    }
+
     public String getName() {
         return name;
     }
