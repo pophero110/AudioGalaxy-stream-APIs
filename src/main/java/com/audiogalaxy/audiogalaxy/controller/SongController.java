@@ -13,13 +13,15 @@ import java.util.List;
 @RequestMapping(path = "/api")
 public class SongController {
 
-    @Autowired
     SongService songService;
+
+    @Autowired
+    public void setSongService(SongService songService) {
+        this.songService = songService;
+    }
 
     @GetMapping(path = "/songs/")
     public List<Song> getSongs() {
         return songService.getSongs();
     }
-
-
 }
