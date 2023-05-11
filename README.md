@@ -8,12 +8,12 @@ Streaming Music App That Is Out of This World!
 - [User Stories](#user-stories)
 - [MVP](#mvp-------completed-------not-completed)
 - [ERD](#erd)
-- [REST Endpoints](#)
-- [How To User Audio Galaxy Streaming API](#)
-- [Favorite Parts](#)
-- [Wins & Hurdles](#)
-- [Languages Used](#)
-- [Works Sited](#)
+- [REST Endpoints](#rest-endpoints)
+- [How To User Audio Galaxy Streaming API](#how-to-user-audio-galaxy-streaming-api)
+- [Favorite Parts](#favorite-parts)
+- [Wins & Hurdles](#wins--hurdles)
+- [Languages Used](#languages-used)
+- [Works Sited](#works-sited)
 
 ***
 ## Project Overview
@@ -66,3 +66,28 @@ venenatis. Nunc convallis est vitae semper convallis. Suspendisse potenti. Mauri
 #### Playlist & Song ERD <br>
 ![Playlist & Song ERD](./Playlist_Song-ERD.jpg)<br><br>
 [ERD Resource Link](https://drive.google.com/file/d/1aKHH1yrHc_hTh5BsFtUyS7XPm4ydv1Rg/view?usp=sharing)
+
+***
+
+## Rest Endpoints
+
+***
+
+## How To User Audio Galaxy Streaming API
+
+***
+
+## Favorite Parts
+
+***
+
+## Wins & Hurdles
+
+***
+
+## Languages Used
+
+***
+
+## Works Sited
+We utilized this [tool](https://app.diagrams.net/) for creating ERD diagrams - [Google Diagrams](https://app.diagrams.net/)
