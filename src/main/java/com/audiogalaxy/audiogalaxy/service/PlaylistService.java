@@ -1,6 +1,5 @@
 package com.audiogalaxy.audiogalaxy.service;
 
-
 import com.audiogalaxy.audiogalaxy.exception.InformationInvalidException;
 import com.audiogalaxy.audiogalaxy.model.Playlist;
 import com.audiogalaxy.audiogalaxy.repository.PlaylistRepository;
@@ -8,14 +7,10 @@ import com.audiogalaxy.audiogalaxy.security.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class PlaylistService {
-
     private PlaylistRepository playlistRepository;
-
     private UserContext userContext;
-
 
     @Autowired
     private void setPlaylistRepository(PlaylistRepository playlistRepository, UserContext userContext) {
@@ -37,7 +32,5 @@ public class PlaylistService {
         // saving the playlist to database
         return playlistRepository.save(playlist);
     }
-
-
 }
 

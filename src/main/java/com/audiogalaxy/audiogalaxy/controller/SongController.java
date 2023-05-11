@@ -16,10 +16,10 @@ public class SongController {
     @Autowired
     SongService songService;
 
- @GetMapping(path = "/songs/")
+    @GetMapping(path = "/songs/")
     public List<Song> getSongs() {
-    return songService.getSongs();
- }
+        return songService.getSongs();
+    }
 
 
 }
