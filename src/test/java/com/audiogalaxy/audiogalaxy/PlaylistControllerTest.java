@@ -3,15 +3,19 @@ package com.audiogalaxy.audiogalaxy;
 import com.audiogalaxy.audiogalaxy.controller.PlaylistController;
 import com.audiogalaxy.audiogalaxy.exception.InformationInvalidException;
 import com.audiogalaxy.audiogalaxy.model.Playlist;
+import com.audiogalaxy.audiogalaxy.security.*;
 import com.audiogalaxy.audiogalaxy.service.PlaylistService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -23,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(PlaylistController.class)
+@Import(TestSecurityConfiguratoin.class)
 public class PlaylistControllerTest {
     @Autowired
     MockMvc mockMvc;
@@ -32,6 +37,13 @@ public class PlaylistControllerTest {
 
     @MockBean
     private PlaylistService playlistService;
+
+    @MockBean
+    private MyUserDetailsService myUserDetailsService;
+
+    @MockBean
+    private JWTUtils jwtUtils;
+
 
     Playlist playlist = new Playlist("rock", "my favorite rock musics");
 
