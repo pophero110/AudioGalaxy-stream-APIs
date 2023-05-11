@@ -87,6 +87,20 @@ venenatis. Nunc convallis est vitae semper convallis. Suspendisse potenti. Mauri
 
 ## Rest Endpoints
 
+#### <ins>Playlist Endpoints</ins>
+| Request Type | URL               | Functionality     | Access  |   |
+|--------------|-------------------|-------------------|---------|---|
+| POST         | api/playlists     | Create Playlist   | private |   |
+| GET          | api/playlists     | Get all Playlists | private |   |
+
+#### <ins>User Endpoints</ins>
+| Request Type | URL              | Functionality | Access  |   |
+|--------------|------------------|---------------|---------|---|
+| POST         | api/users/       | Register      | public  |   |
+| POST         | api/users/login/ | Login         | public  |   |
+| PUT          | api/users/       | Update User   | Private |   |
+
+<br>
 ***
 
 ## How To User Audio Galaxy Streaming API
@@ -102,6 +116,8 @@ venenatis. Nunc convallis est vitae semper convallis. Suspendisse potenti. Mauri
 ***
 
 ## Languages Used
+ - Java
+ - Spring Boot
 
 ***
 
