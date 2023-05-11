@@ -85,4 +85,8 @@ public class UserService {
         }
     }
 
+    public ResponseEntity<?> getLoginUsers(LoginRequest loginRequest) {
+        return ResponseEntity.ok(new LoginResponse("Error:  username or password is incorrect."));
+    }
+
 }
