@@ -1,6 +1,7 @@
 package com.audiogalaxy.audiogalaxy;
 
 import com.audiogalaxy.audiogalaxy.exception.InformationInvalidException;
+import com.audiogalaxy.audiogalaxy.exception.InformationNotFoundException;
 import com.audiogalaxy.audiogalaxy.model.Playlist;
 import com.audiogalaxy.audiogalaxy.model.User;
 import com.audiogalaxy.audiogalaxy.repository.PlaylistRepository;
@@ -97,5 +98,19 @@ public class PlaylistServiceTest {
         List<Playlist> returnedPlaylist = playlistService.getPlaylists();
 
         Assertions.assertEquals(2, returnedPlaylist.size());
+    }
+
+    @Test
+    @DisplayName("if currently logged in user does not have any playlist, an exception will be thrown")
+    public void testGetPlaylistsThrowsException() {
+        // set currently logged in user
+        User currentlyLoggedInUser = new User("jeff", "jeff@gmail.com", "password");
+        when(userContext.getCurrentLoggedInUser()).thenReturn(currentlyLoggedInUser);
+        // set a list of playlists that belong to currentlyLoggedInUser
+        List<Playlist> playlistLists = new ArrayList<>();
+        when(playlistRepository.findByUserId(anyLong())).thenReturn(playlistLists);
+
+        // call the method under test
+        Assertions.assertThrows(InformationNotFoundException.class, () -> playlistService.getPlaylists());
     }
 }
