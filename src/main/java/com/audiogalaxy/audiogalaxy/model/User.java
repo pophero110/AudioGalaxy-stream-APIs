@@ -58,11 +58,7 @@ public class User {
         this.password = password;
     }
 
-    public void setActive(Boolean active) {
-        isActive = active;
-    }
+    public void setActive(Boolean active) { isActive = active;}
 
-    public Boolean getActive() {
-        return isActive;
-    }
+    public Boolean getActive() { return isActive;}
 }
