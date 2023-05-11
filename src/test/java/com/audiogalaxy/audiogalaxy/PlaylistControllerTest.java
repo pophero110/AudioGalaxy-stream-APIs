@@ -2,6 +2,7 @@ package com.audiogalaxy.audiogalaxy;
 
 import com.audiogalaxy.audiogalaxy.controller.PlaylistController;
 import com.audiogalaxy.audiogalaxy.exception.InformationInvalidException;
+import com.audiogalaxy.audiogalaxy.exception.InformationNotFoundException;
 import com.audiogalaxy.audiogalaxy.model.Playlist;
 import com.audiogalaxy.audiogalaxy.model.User;
 import com.audiogalaxy.audiogalaxy.security.*;
@@ -101,6 +102,18 @@ public class PlaylistControllerTest {
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("should return 404 if currently authenticated user has no playlist")
+    public void shouldGetPlaylistUnSuccessfully() throws Exception {
+        when(playlistService.getPlaylists()).thenThrow(new InformationNotFoundException("No playlist has been found"));
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/api/playlists/");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isNotFound())
                 .andDo(print());
     }
 }
