@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 
 
 @WebMvcTest(SongController.class)
-@Import(TestSecurityConfiguratoin.class)
+@Import(TestSecurityConfiguration.class)
 public class SongControllerTest {
 
     @Autowired
