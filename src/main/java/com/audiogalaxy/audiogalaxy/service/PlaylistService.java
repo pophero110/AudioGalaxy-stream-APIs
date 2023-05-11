@@ -1,11 +1,14 @@
 package com.audiogalaxy.audiogalaxy.service;
 
 import com.audiogalaxy.audiogalaxy.exception.InformationInvalidException;
+import com.audiogalaxy.audiogalaxy.exception.InformationNotFoundException;
 import com.audiogalaxy.audiogalaxy.model.Playlist;
 import com.audiogalaxy.audiogalaxy.repository.PlaylistRepository;
 import com.audiogalaxy.audiogalaxy.security.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PlaylistService {
@@ -31,6 +34,19 @@ public class PlaylistService {
         playlist.setUser(userContext.getCurrentLoggedInUser());
         // saving the playlist to database
         return playlistRepository.save(playlist);
+    }
+
+    /**
+     * fetch a list of playlists that belong to currently logged-in user and return the list
+     * @return a list of playlists
+     * @throws InformationInvalidException if the user does not have any playlist
+     */
+    public List<Playlist> getPlaylists() {
+        List<Playlist> playlists = playlistRepository.findByUserId(userContext.getCurrentLoggedInUser().getId());
+        if (playlists.isEmpty()) {
+            throw new InformationNotFoundException("No playlist has been found");
+        }
+        return playlists ;
     }
 }
 

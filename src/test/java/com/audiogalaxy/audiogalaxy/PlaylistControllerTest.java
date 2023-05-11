@@ -2,7 +2,9 @@ package com.audiogalaxy.audiogalaxy;
 
 import com.audiogalaxy.audiogalaxy.controller.PlaylistController;
 import com.audiogalaxy.audiogalaxy.exception.InformationInvalidException;
+import com.audiogalaxy.audiogalaxy.exception.InformationNotFoundException;
 import com.audiogalaxy.audiogalaxy.model.Playlist;
+import com.audiogalaxy.audiogalaxy.model.User;
 import com.audiogalaxy.audiogalaxy.security.*;
 import com.audiogalaxy.audiogalaxy.security.MyUserDetailsService;
 import com.audiogalaxy.audiogalaxy.service.PlaylistService;
@@ -17,6 +19,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -78,6 +85,35 @@ public class PlaylistControllerTest {
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("should return 200 and a list of playlists from currently authenticated user")
+    public void shouldGetPlaylistSuccessfully() throws Exception {
+        User currentlyLoggedInUser = new User("jeff", "jeff@gmail.com", "password");
+        List<Playlist> playlistLists = new ArrayList<>(Arrays.asList(
+                new Playlist("rock", "description", currentlyLoggedInUser), new Playlist("relax", "description", currentlyLoggedInUser)
+        ));
+        when(playlistService.getPlaylists()).thenReturn(playlistLists);
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/api/playlists/");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("should return 404 if currently authenticated user has no playlist")
+    public void shouldGetPlaylistUnSuccessfully() throws Exception {
+        when(playlistService.getPlaylists()).thenThrow(new InformationNotFoundException("No playlist has been found"));
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/api/playlists/");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isNotFound())
                 .andDo(print());
     }
 }
