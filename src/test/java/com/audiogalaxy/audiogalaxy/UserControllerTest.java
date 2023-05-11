@@ -7,37 +7,25 @@ import com.audiogalaxy.audiogalaxy.model.request.LoginRequest;
 import com.audiogalaxy.audiogalaxy.security.*;
 import com.audiogalaxy.audiogalaxy.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.ArrayList;
 
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -65,6 +53,7 @@ public class UserControllerTest {
 
     @Autowired
     private JWTUtils jwtUtils;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -98,7 +87,6 @@ public class UserControllerTest {
         mockMvc.perform(mockRequest).andExpect(status().isBadRequest()).andDo(print());
     }
 
-
     @Test
     @DisplayName("user name can not be blank")
     public void userNameCanNotBeBlank() throws Exception {
@@ -111,7 +99,6 @@ public class UserControllerTest {
 
         mockMvc.perform(mockRequest).andExpect(status().isBadRequest()).andDo(print());
     }
-
 
     @Test
     @DisplayName("email can not be blank")
@@ -161,9 +148,7 @@ public class UserControllerTest {
     public void onlyAllowAuthenticatedUserToLogin() throws Exception {
         User loginRequest = new User("tim", "tim@hotmail.com", "tim123");;
         String token = jwtUtils.generateJwtToken(new MyUserDetails(loginRequest));
-        String password = passwordEncoder.encode(loginRequest.getPassword());
-        String loginUser = jwtUtils.getUserNameFromJwtToken(token);
-
+        // ensure we have a token
         assertNotNull(token);
 
         String body = "{\"name\"" +":" +"\"" + loginRequest.getName() +"\"" + "," + "\""+ "email" + "\"" + ":" +"\"" + loginRequest.getEmail() + "\"" + "," + "\"" + "password" +"\"" + ":" + "\"" + loginRequest.getPassword() +"\"" + "}";
