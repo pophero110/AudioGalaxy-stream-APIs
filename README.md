@@ -57,6 +57,22 @@ venenatis. Nunc convallis est vitae semper convallis. Suspendisse potenti. Mauri
 
 ## MVP ( - ✓ - Completed / - ✗ - Not Completed)
 
+1. Should consist of 3 models.  - ✓
+2. The environment settings should be using Spring Profiles.  - ✗
+3. Use a combination of Spring Security and JWT Tokens.  - ✗
+4. The routes should be protected by JWT except for login/register.  - ✗
+5. A minimum of 1 API point that is fully CRUD operable.  - ✗
+6. API endpoints must be able to perform CRUD based on business use-case.  - ✗
+7. Provide CRUD routes that were built based on rest conventions to be a part of the API.  - ✗
+8. Have graceful exception handling in place.  - ✗
+9. In the event that an  exception occurs, you should send error message to user.  - ✗
+10. Code on different branches during development.  - ✗
+11. Utilize KISS & DRY Principals.  - ✗
+12. Write code that is test driven with TDD Approach.  - ✗ 
+13. Unit test the controller & service classes with MockMVC.  - ✗
+14. Write Doc Strings for each method. - ✗
+15. Provide REST Endpoints. - ✗
+
 ***
 ## ERD
 
