@@ -47,7 +47,6 @@ public class PlaylistControllerTest {
     @Test
     @DisplayName("should return 200 and a playlist object")
     public void shouldCreatePlaylistSuccessfully() throws Exception {
-        // Arrange
         // mock createPlaylist method to return a playlist
         when(playlistService.createPlayList(any(Playlist.class))).thenReturn(playlist);
 
@@ -57,7 +56,6 @@ public class PlaylistControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(playlist));
 
-        // Act & Assert
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()))
@@ -69,7 +67,6 @@ public class PlaylistControllerTest {
     @Test
     @DisplayName("should return 400 when the name of the playlist is blank")
     public void shouldCreatePlaylistNotSuccessfully() throws Exception {
-        // Arrange
         Playlist playlistWithBlankName = new Playlist("", "my favorite rock musics");
         // mock createPlaylist method to throw an exception
         when(playlistService.createPlayList(any(Playlist.class)))
@@ -79,7 +76,6 @@ public class PlaylistControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(playlistWithBlankName));
 
-        // Act & Assert
         mockMvc.perform(mockRequest)
                 .andExpect(status().isBadRequest())
                 .andDo(print());
