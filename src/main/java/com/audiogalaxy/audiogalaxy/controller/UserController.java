@@ -31,9 +31,16 @@ public class UserController {
         return userService.createUser(user);
     }
 
+    /**
+     * Method calls loginUser method to validate user.
+     * @param loginRequest
+     * @return 200 and object which contains the token
+     * @return 400
+     * @throws Exception
+     */
     @PostMapping(path="/users/login/")
-    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
-        return userService.loginUser(loginRequest);
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) throws Exception {
+        return ResponseEntity.ok(userService.loginUser(loginRequest));
     }
 
 }

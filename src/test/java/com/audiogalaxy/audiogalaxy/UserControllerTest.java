@@ -4,6 +4,7 @@ import com.audiogalaxy.audiogalaxy.controller.UserController;
 import com.audiogalaxy.audiogalaxy.exception.InformationInvalidException;
 import com.audiogalaxy.audiogalaxy.model.User;
 import com.audiogalaxy.audiogalaxy.model.request.LoginRequest;
+import com.audiogalaxy.audiogalaxy.model.response.LoginResponse;
 import com.audiogalaxy.audiogalaxy.security.*;
 import com.audiogalaxy.audiogalaxy.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,18 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -33,9 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-@WebMvcTest(value = UserController.class, includeFilters = {
-        // to include JwtUtil in spring context
-        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JWTUtils.class)})
+@WebMvcTest(UserController.class)
 @Import(SecurityConfiguration.class)
 public class UserControllerTest {
 
@@ -51,11 +44,13 @@ public class UserControllerTest {
     @MockBean
     private MyUserDetailsService myUserDetailsService;
 
-    @Autowired
+    @MockBean
     private JWTUtils jwtUtils;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+   @Autowired
+    private JwtRequestFilter jwtRequestFilter;
+
+
 
     private final String endpoint = "/api/users/";
 
@@ -128,36 +123,33 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName(" unauthenticated user not able login using valid endpoint")
-    public void unauthenticatedUserNotAbleToLogin() throws Exception {
-        when(userService.loginUser(Mockito.any(LoginRequest.class))).thenReturn(new ResponseEntity<>(HttpStatus.FORBIDDEN));
-        User loginRequest = new User("tim", "tim@hotmail.com", "tim123");
-        String password = passwordEncoder.encode(loginRequest.getPassword());
-        String body = "{\"name\"" +":" +"\"" + loginRequest.getName() +"\"" + "," + "\""+ "email" + "\"" + ":" +"\"" + loginRequest.getEmail() + "\"" + "," + "\"" + "password" +"\"" + ":" + "\"" + password +"\"" + "}";
+    @DisplayName("when login successfully should return 200 and a token")
+    public void shouldLoginSuccessfully() throws Exception {
+        User loginRequest = new User("tim", "tim@hotmail.com", "tim123");;
+        when(userService.loginUser(Mockito.any(LoginRequest.class))).thenReturn(new LoginResponse("token"));
 
         MockHttpServletRequestBuilder mockRequest = post(endpoint + "login/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body)
-                .accept(MediaType.APPLICATION_JSON);
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(loginRequest));
 
-        mockMvc.perform(mockRequest).andExpect(status().isForbidden()).andDo(print());
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.message").value("token"))
+                .andDo(print());
     }
 
     @Test
-    @DisplayName("only allow authenticated user to login endpoint valid")
-    public void onlyAllowAuthenticatedUserToLogin() throws Exception {
+    @DisplayName("when user login unsuccessfully should return 400")
+    public void shouldLoginUnSuccessfully() throws Exception {
         User loginRequest = new User("tim", "tim@hotmail.com", "tim123");;
-        String token = jwtUtils.generateJwtToken(new MyUserDetails(loginRequest));
-        // ensure we have a token
-        assertNotNull(token);
+        when(userService.loginUser(Mockito.any(LoginRequest.class))).thenThrow(new InformationInvalidException("User not valid"));
 
-        String body = "{\"name\"" +":" +"\"" + loginRequest.getName() +"\"" + "," + "\""+ "email" + "\"" + ":" +"\"" + loginRequest.getEmail() + "\"" + "," + "\"" + "password" +"\"" + ":" + "\"" + loginRequest.getPassword() +"\"" + "}";
+        MockHttpServletRequestBuilder mockRequest = post(endpoint + "login/")
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(loginRequest));
 
-        mockMvc.perform(post(endpoint + "login/")
-                        .content(body)
-                        .header("Authorization", "Bear " + token)
-                        .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isOk()).andDo(print());
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isBadRequest())
+                .andDo(print());
     }
 
 
