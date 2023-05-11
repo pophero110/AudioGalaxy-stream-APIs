@@ -30,6 +30,11 @@ public class PlaylistController {
         return playlistService.createPlayList(playlist);
     }
 
+    /**
+     * Return a list of playlists that belong to currently authenticated user
+     * @return a list of playlists
+     * @return 400 if the user does not have any playlist
+     */
     @GetMapping(path = "/playlists/")
     public List<Playlist> getPlaylists() {
         return playlistService.getPlaylists();

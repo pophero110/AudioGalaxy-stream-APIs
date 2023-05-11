@@ -39,6 +39,7 @@ public class PlaylistService {
     /**
      * fetch a list of playlists that belong to currently logged-in user and return the list
      * @return a list of playlists
+     * @throws InformationInvalidException if the user does not have any playlist
      */
     public List<Playlist> getPlaylists() {
         List<Playlist> playlists = playlistRepository.findByUserId(userContext.getCurrentLoggedInUser().getId());
