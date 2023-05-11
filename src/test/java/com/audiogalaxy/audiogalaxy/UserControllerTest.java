@@ -133,7 +133,7 @@ public class UserControllerTest {
     @Test
     @DisplayName("when login successfully should return 200 and a token")
     public void shouldLoginSuccessfully() throws Exception {
-        User loginRequest = new User("tim", "tim@hotmail.com", "tim123");;
+        User loginRequest = new User("tim", "tim@hotmail.com", "tim123");
         when(userService.loginUser(Mockito.any(LoginRequest.class))).thenReturn(new LoginResponse("token"));
 
         MockHttpServletRequestBuilder mockRequest = post(endpoint + "login/")
@@ -151,7 +151,7 @@ public class UserControllerTest {
     @Test
     @DisplayName("when user login unsuccessfully should return 400")
     public void shouldLoginUnSuccessfully() throws Exception {
-        User loginRequest = new User("tim", "tim@hotmail.com", "tim123");;
+        User loginRequest = new User("tim", "tim@hotmail.com", "tim123");
         when(userService.loginUser(Mockito.any(LoginRequest.class))).thenThrow(new InformationInvalidException("User not valid"));
 
         MockHttpServletRequestBuilder mockRequest = post(endpoint + "login/")

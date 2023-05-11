@@ -3,7 +3,7 @@ package com.audiogalaxy.audiogalaxy;
 import com.audiogalaxy.audiogalaxy.model.Song;
 import com.audiogalaxy.audiogalaxy.repository.SongRepository;
 import com.audiogalaxy.audiogalaxy.service.SongService;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +31,6 @@ public class SongServiceTest {
         ));
         when(songRepository.findAll()).thenReturn(songs);
         List<Song> returnSongs = songService.getSongs();
-        Assert.assertEquals(10, returnSongs.size());
+        Assertions.assertEquals(10, returnSongs.size());
     }
 }

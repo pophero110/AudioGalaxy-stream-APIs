@@ -25,9 +25,8 @@ public class SongService {
      */
     public List<Song> getSongs() {
         List<Song> songs = songRepository.findAll();
-        List<Song> filteredSongs = songs.stream()
+        return songs.stream()
                 .limit(10)
                 .collect(Collectors.toList());
-        return filteredSongs;
     }
 }
