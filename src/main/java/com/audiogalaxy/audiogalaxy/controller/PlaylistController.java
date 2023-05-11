@@ -4,10 +4,9 @@ package com.audiogalaxy.audiogalaxy.controller;
 import com.audiogalaxy.audiogalaxy.model.Playlist;
 import com.audiogalaxy.audiogalaxy.service.PlaylistService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api")
@@ -29,5 +28,10 @@ public class PlaylistController {
     @PostMapping(path = "/playlists/")
     public Playlist createPlaylist(@RequestBody Playlist playlist) {
         return playlistService.createPlayList(playlist);
+    }
+
+    @GetMapping(path = "/playlists/")
+    public List<Playlist> getPlaylists() {
+        return playlistService.getPlaylists();
     }
 }
