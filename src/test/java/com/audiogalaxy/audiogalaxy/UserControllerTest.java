@@ -173,29 +173,29 @@ public class UserControllerTest {
                 .andDo(print());
     }
 
-//    @Test
-//    @DisplayName("when user account is not active should return 404")
-//    public void shouldNotBeAbleToInactiveAcct() throws Exception {
-//        User loginRequest = new User("timm", "timm@hotmail.com", "tim123");
-//        when(userService.setUserToInactive(Mockito.any(LoginRequest.class))).thenReturn(notNull());
-//
-//        MockHttpServletRequestBuilder mockRequest = put(endpoint + "login/")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON)
-//                .content(mapper.writeValueAsString(loginRequest));
-//
-//        mockMvc.perform(mockRequest)
-//                .andExpect(status().isNotFound())
-//                .andDo(print());
-//
-//    }
+    @Test
+    @DisplayName("when user account is not active should return 404")
+    public void shouldNotBeAbleToInactiveAcct() throws Exception {
+        User loginRequest = new User("tim", "mm", "tim123");
+        when(userService.setUserToInactive(Mockito.any(LoginRequest.class))).thenThrow(new InformationInvalidException("not found"));
+
+        MockHttpServletRequestBuilder mockRequest = put(endpoint + "login/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(loginRequest));
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isNotFound())
+                .andDo(print());
+
+    }
 
     @Test
     @DisplayName("when user account is not active should return 200")
     public void shouldBeActiveUser() throws Exception {
         User loginRequest = new User("tim", "tim@hotmail.com", "tim123");
         loginRequest.setActive(false);
-        when(userService.setUserToInactive(Mockito.any(LoginRequest.class))).thenReturn(notNull());
+        when(userService.setUserToInactive(Mockito.any(LoginRequest.class))).thenThrow(new InformationInvalidException("you are not active"));
 
         MockHttpServletRequestBuilder mockRequest = put(endpoint + "login/")
                 .contentType(MediaType.APPLICATION_JSON)
