@@ -19,6 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -74,5 +78,24 @@ public class PlaylistServiceTest {
                 .thenThrow(new InformationInvalidException("The name of playlist can not empty or contains only space"));
 
         Assert.assertThrows(InformationInvalidException.class, () -> playlistService.createPlayList(playlist));
+    }
+
+    @Test
+    @DisplayName("get a list of playlists that belongs to currently logged in user")
+    public void testGetPlaylists() {
+        // set currently logged in user
+        User currentlyLoggedInUser = new User("jeff", "jeff@gmail.com", "password");
+        currentlyLoggedInUser.setId(2L);
+        when(userContext.getCurrentLoggedInUser()).thenReturn(currentlyLoggedInUser);
+        // set a list of playlists that belong to currentlyLoggedInUser
+        List<Playlist> playlistLists = new ArrayList<>(Arrays.asList(
+                new Playlist("rock", "description", currentlyLoggedInUser), new Playlist("relax", "description", currentlyLoggedInUser)
+        ));
+        when(playlistRepository.findByUserId(anyLong())).thenReturn(playlistLists);
+
+        // call the method under test
+        List<Playlist> returnedPlaylist = playlistService.getPlaylists();
+
+        Assertions.assertEquals(2, returnedPlaylist.size());
     }
 }
