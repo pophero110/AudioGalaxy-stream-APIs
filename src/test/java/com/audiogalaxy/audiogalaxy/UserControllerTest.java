@@ -86,10 +86,9 @@ public class UserControllerTest {
     @DisplayName("user name can not be blank")
     public void userNameCanNotBeBlank() throws Exception {
         when(userService.createUser(Mockito.any(User.class))).thenThrow(new InformationInvalidException("The username can not be empty or contain spaces"));
-        MockHttpServletRequestBuilder mockRequest = post(endpoint).
-                contentType(MediaType.APPLICATION_JSON)
+        MockHttpServletRequestBuilder mockRequest = post(endpoint)
+                .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-
                 .content(mapper.writeValueAsString(new User("", "hello@email.com", "1,2,3")));
 
         mockMvc.perform(mockRequest).andExpect(status().isBadRequest()).andDo(print());
@@ -99,7 +98,10 @@ public class UserControllerTest {
     @DisplayName("email can not be blank")
     public void emailCanNotBeBlank() throws Exception {
         when(userService.createUser(Mockito.any(User.class))).thenThrow(new InformationInvalidException("The email can not be empty or contain spaces"));
-        MockHttpServletRequestBuilder mockRequest = post(endpoint).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(new User("Pam", "", "1,2,3")));
+        MockHttpServletRequestBuilder mockRequest = post(endpoint)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(new User("Pam", "", "1,2,3")));
 
         mockMvc.perform(mockRequest).andExpect(status().isBadRequest()).andDo(print());
     }
@@ -108,7 +110,10 @@ public class UserControllerTest {
     @DisplayName("password can not be blank")
     public void passwordCanNotBeBlank() throws Exception {
         when(userService.createUser(Mockito.any(User.class))).thenThrow(new InformationInvalidException("The password can not be empty or contain spaces"));
-        MockHttpServletRequestBuilder mockRequest = post(endpoint).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(new User("Pam", "pam@gmail.com", "")));
+        MockHttpServletRequestBuilder mockRequest = post(endpoint).
+                contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(new User("Pam", "pam@gmail.com", "")));
 
         mockMvc.perform(mockRequest).andExpect(status().isBadRequest()).andDo(print());
     }
@@ -117,7 +122,10 @@ public class UserControllerTest {
     @DisplayName("password must have at least 6 characters")
     public void passwordMustHaveAtLeast6Characters() throws Exception {
         when(userService.createUser(Mockito.any(User.class))).thenThrow(new InformationInvalidException("The password must contain 6 characters"));
-        MockHttpServletRequestBuilder mockRequest = post(endpoint).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(new User("Pam", "pam@gmail.com", "12345")));
+        MockHttpServletRequestBuilder mockRequest = post(endpoint)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(new User("Pam", "pam@gmail.com", "12345")));
 
         mockMvc.perform(mockRequest).andExpect(status().isBadRequest()).andDo(print());
     }
@@ -129,7 +137,9 @@ public class UserControllerTest {
         when(userService.loginUser(Mockito.any(LoginRequest.class))).thenReturn(new LoginResponse("token"));
 
         MockHttpServletRequestBuilder mockRequest = post(endpoint + "login/")
-                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(loginRequest));
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(loginRequest));
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
@@ -145,13 +155,12 @@ public class UserControllerTest {
         when(userService.loginUser(Mockito.any(LoginRequest.class))).thenThrow(new InformationInvalidException("User not valid"));
 
         MockHttpServletRequestBuilder mockRequest = post(endpoint + "login/")
-                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(loginRequest));
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(loginRequest));
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isBadRequest())
                 .andDo(print());
     }
-
-
-
 }
