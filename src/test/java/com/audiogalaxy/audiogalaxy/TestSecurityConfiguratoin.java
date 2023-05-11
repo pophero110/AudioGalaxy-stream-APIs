@@ -10,7 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 
 /**
- * make the endpoint to be public in testing environment
+ * make the endpoint to be public in test environment
  */
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
