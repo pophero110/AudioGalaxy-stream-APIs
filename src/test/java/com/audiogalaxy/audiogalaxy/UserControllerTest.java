@@ -16,13 +16,22 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import java.util.Optional;
+
 import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.notNull;
 import static org.mockito.Mockito.when;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -133,7 +142,7 @@ public class UserControllerTest {
     @Test
     @DisplayName("when login successfully should return 200 and a token")
     public void shouldLoginSuccessfully() throws Exception {
-        User loginRequest = new User("tim", "tim@hotmail.com", "tim123");;
+        User loginRequest = new User("tim", "tim@hotmail.com", "tim123");
         when(userService.loginUser(Mockito.any(LoginRequest.class))).thenReturn(new LoginResponse("token"));
 
         MockHttpServletRequestBuilder mockRequest = post(endpoint + "login/")
@@ -151,7 +160,7 @@ public class UserControllerTest {
     @Test
     @DisplayName("when user login unsuccessfully should return 400")
     public void shouldLoginUnSuccessfully() throws Exception {
-        User loginRequest = new User("tim", "tim@hotmail.com", "tim123");;
+        User loginRequest = new User("tim", "tim@hotmail.com", "tim123");
         when(userService.loginUser(Mockito.any(LoginRequest.class))).thenThrow(new InformationInvalidException("User not valid"));
 
         MockHttpServletRequestBuilder mockRequest = post(endpoint + "login/")
@@ -163,4 +172,41 @@ public class UserControllerTest {
                 .andExpect(status().isBadRequest())
                 .andDo(print());
     }
+
+//    @Test
+//    @DisplayName("when user account is not active should return 404")
+//    public void shouldNotBeAbleToInactiveAcct() throws Exception {
+//        User loginRequest = new User("timm", "timm@hotmail.com", "tim123");
+//        when(userService.setUserToInactive(Mockito.any(LoginRequest.class))).thenReturn(notNull());
+//
+//        MockHttpServletRequestBuilder mockRequest = put(endpoint + "login/")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .accept(MediaType.APPLICATION_JSON)
+//                .content(mapper.writeValueAsString(loginRequest));
+//
+//        mockMvc.perform(mockRequest)
+//                .andExpect(status().isNotFound())
+//                .andDo(print());
+//
+//    }
+
+    @Test
+    @DisplayName("when user account is not active should return 200")
+    public void shouldBeActiveUser() throws Exception {
+        User loginRequest = new User("tim", "tim@hotmail.com", "tim123");
+        loginRequest.setActive(false);
+        when(userService.setUserToInactive(Mockito.any(LoginRequest.class))).thenReturn(notNull());
+
+        MockHttpServletRequestBuilder mockRequest = put(endpoint + "login/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(loginRequest));
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andDo(print());
+
+    }
+
+
 }

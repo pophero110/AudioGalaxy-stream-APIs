@@ -9,12 +9,16 @@ import com.audiogalaxy.audiogalaxy.security.JWTUtils;
 import com.audiogalaxy.audiogalaxy.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -82,6 +86,23 @@ public class UserService {
             return new LoginResponse(JWT);
         } catch (Exception e) {
             throw new InformationInvalidException("Error:  user email or password is incorrect.");
+        }
+    }
+
+    /**
+     * Method handles setting a user's account to inactive.
+     * @param loginRequest Logged in user
+     * @return If user is found or not, if os inactive user's account
+     * @throws Exception Return 404 or 200
+     */
+    public ResponseEntity<?> setUserToInactive(LoginRequest loginRequest) throws Exception {
+        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(loginRequest.getEmail()));
+        if (user.isPresent() && user.get().getActive()){
+            user.get().setActive(false);
+            userRepository.save(user.get());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
