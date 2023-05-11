@@ -140,24 +140,21 @@ public class UserControllerTest {
         mockMvc.perform(mockRequest).andExpect(status().isBadRequest()).andDo(print());
     }
 
-//    @Test
-//    @DisplayName(" unauthenticated user not able login using valid endpoint")
-//    public void unauthenticatedUserNotAbleToLogin() throws Exception {
-////        when(userService.loginUser(Mockito.any(LoginRequest.class))).thenThrow(new InformationInvalidException("Unauthenticated user"));
-//
-//        User loginRequest = new User("tim", "tim@hotmail.com", "tim123");
-//        String password = passwordEncoder.encode(loginRequest.getPassword());
-//        String body = "{\"name\"" +":" +"\"" + loginRequest.getName() +"\"" + "," + "\""+ "email" + "\"" + ":" +"\"" + loginRequest.getEmail() + "\"" + "," + "\"" + "password" +"\"" + ":" + "\"" + password +"\"" + "}";
-//
-//        when(userService.loginUser(Mockito.any(LoginRequest.class))).thenThrow(new InformationInvalidException("Unauthenticated user"));
-//
-//        MockHttpServletRequestBuilder mockRequest = post(endpoint + "login/")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(body)
-//                .accept(MediaType.APPLICATION_JSON);
-//
-//        mockMvc.perform(mockRequest).andExpect(status().isForbidden()).andDo(print());
-//    }
+    @Test
+    @DisplayName(" unauthenticated user not able login using valid endpoint")
+    public void unauthenticatedUserNotAbleToLogin() throws Exception {
+        when(userService.loginUser(Mockito.any(LoginRequest.class))).thenReturn(new ResponseEntity<>(HttpStatus.FORBIDDEN));
+        User loginRequest = new User("tim", "tim@hotmail.com", "tim123");
+        String password = passwordEncoder.encode(loginRequest.getPassword());
+        String body = "{\"name\"" +":" +"\"" + loginRequest.getName() +"\"" + "," + "\""+ "email" + "\"" + ":" +"\"" + loginRequest.getEmail() + "\"" + "," + "\"" + "password" +"\"" + ":" + "\"" + password +"\"" + "}";
+
+        MockHttpServletRequestBuilder mockRequest = post(endpoint + "login/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(mockRequest).andExpect(status().isForbidden()).andDo(print());
+    }
 
     @Test
     @DisplayName("only allow authenticated user to login endpoint valid")
