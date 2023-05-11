@@ -2,12 +2,17 @@ package com.audiogalaxy.audiogalaxy.service;
 
 import com.audiogalaxy.audiogalaxy.exception.InformationInvalidException;
 import com.audiogalaxy.audiogalaxy.model.User;
+import com.audiogalaxy.audiogalaxy.model.request.LoginRequest;
+import com.audiogalaxy.audiogalaxy.model.response.LoginResponse;
 import com.audiogalaxy.audiogalaxy.repository.UserRepository;
 import com.audiogalaxy.audiogalaxy.security.JWTUtils;
 import com.audiogalaxy.audiogalaxy.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +55,7 @@ public class UserService {
         if(userObject.getPassword().length() < 5) {
             throw new InformationInvalidException("The password must contain 6 characters");
         }
+
         //It converts the password to a jwt token
         userObject.setPassword(passwordEncoder.encode(userObject.getPassword()));
 
@@ -58,6 +64,25 @@ public class UserService {
 
     public User findUserByEmailAddress(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    /**
+     * Method handles login user authentication.
+     * @param loginRequest Of type LoginRequest class/object
+     * @return A LoginResponse object which contains a token.
+     * @throws InformationInvalidException if user's email and password is not valid
+     */
+    public LoginResponse loginUser(LoginRequest loginRequest) throws Exception {
+        try {
+            Authentication authentication = authenticationManager.authenticate( new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            myUserDetails = (MyUserDetails) authentication.getPrincipal();
+            // generate token
+            final String JWT = jwtUtils.generateJwtToken(myUserDetails);
+            return new LoginResponse(JWT);
+        } catch (Exception e) {
+            throw new InformationInvalidException("Error:  user email or password is incorrect.");
+        }
     }
 
 }
