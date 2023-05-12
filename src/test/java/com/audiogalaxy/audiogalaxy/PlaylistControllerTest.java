@@ -131,4 +131,16 @@ public class PlaylistControllerTest {
                 .andExpect(jsonPath("$.length()").value(1))
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("return 404 if the playlist is not found")
+    public void shouldGetSongsFromPlaylistUnsuccessfully() throws Exception {
+        when(playlistService.getSongByPlaylistId(anyLong())).thenThrow(new InformationNotFoundException("Playlist with id 1 is not found"));
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/api/playlists/1/");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
 }
