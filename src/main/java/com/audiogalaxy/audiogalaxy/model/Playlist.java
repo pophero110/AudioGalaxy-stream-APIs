@@ -24,6 +24,17 @@ public class Playlist {
 
     }
 
+    public Playlist(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public Playlist(String name, String description, User user) {
+        this.name = name;
+        this.description = description;
+        this.user = user;
+    }
+
     public String getName() {
         return name;
     }
@@ -32,8 +43,11 @@ public class Playlist {
         return description;
     }
 
-    public Playlist(String name, String description) {
-        this.name = name;
-        this.description = description;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
     }
 }

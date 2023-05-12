@@ -26,8 +26,8 @@ public class UserService {
      private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
-    private JWTUtils jwtUtils;
-    private AuthenticationManager authenticationManager;
+    private final JWTUtils jwtUtils;
+    private final AuthenticationManager authenticationManager;
     private MyUserDetails myUserDetails;
 
     @Autowired
@@ -39,13 +39,13 @@ public class UserService {
         this.authenticationManager = authenticationManager;
         this.myUserDetails = myUserDetails;
     }
+
     /**
      * This is the method that will create user, validates email, password and password length.
      * Checks to make sure the name, email & password can not be blank.
      * @param userObject contain require data.  Is used for creating user.
      * @return returns responseEntity status 200 & 400.
      */
-
     public User createUser (User userObject){
         if(userObject.getName().isBlank()){
             throw new InformationInvalidException("The username can not be empty or contain spaces");
@@ -76,7 +76,7 @@ public class UserService {
      * @return A LoginResponse object which contains a token.
      * @throws InformationInvalidException if user's email and password is not valid
      */
-    public LoginResponse loginUser(LoginRequest loginRequest) throws Exception {
+    public LoginResponse loginUser(LoginRequest loginRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate( new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -93,9 +93,8 @@ public class UserService {
      * Method handles setting a user's account to inactive.
      * @param loginRequest Logged in user
      * @return If user is found or not, if os inactive user's account
-     * @throws Exception Return 404 or 200
      */
-    public ResponseEntity<?> setUserToInactive(LoginRequest loginRequest) throws Exception {
+    public ResponseEntity<?> setUserToInactive(LoginRequest loginRequest) {
         Optional<User> user = Optional.ofNullable(userRepository.findByEmail(loginRequest.getEmail()));
         if (user.isPresent() && user.get().getActive()){
             user.get().setActive(false);
@@ -116,5 +115,4 @@ public class UserService {
         User activeUser = userRepository.findByEmail(loginRequest.getEmail());
         return activeUser.getActive();
     }
-
 }
