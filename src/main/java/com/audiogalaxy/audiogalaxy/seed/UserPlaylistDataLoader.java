@@ -51,6 +51,8 @@ public class UserPlaylistDataLoader implements CommandLineRunner {
      */
     private void loadUserPlaylistData() {
         if (playlistRepository.count() == 0) {
+
+            //Create user & playlist objects
             String password = passwordEncoder.encode("123456");
             User user1 = new User("Dan","dan@gmail.com", password );
             userRepository.save(user1);
