@@ -75,8 +75,8 @@ Users can interact with the app to conduct CRUD action by creating an account, a
 2. The environment settings should be using Spring Profiles.  - ✓
 3. Use a combination of Spring Security and JWT Tokens.  - ✓
 4. The routes should be protected by JWT except for login/register.  - ✓
-5. A minimum of 1 REST API point that is fully CRUD operable.  - ✗
-6. API endpoints must be able to perform CRUD based on business use-case.  - ✗
+5. A minimum of 1 REST API point that is fully CRUD operable.  - ✓
+6. API endpoints must be able to perform CRUD based on business use-case.  - ✓
 7. Provide CRUD routes that were built based on rest conventions to be a part of the API.  - ✓
 8. Have graceful exception handling in place.  - ✓
 9. In the event that an  exception occurs, you should send error message to user.  - ✓
