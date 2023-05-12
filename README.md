@@ -101,6 +101,7 @@ venenatis. Nunc convallis est vitae semper convallis. Suspendisse potenti. Mauri
 | PUT          | api/users/       | Update User   | Private |   |
 
 <br>
+
 ***
 
 ## How To User Audio Galaxy Streaming API
