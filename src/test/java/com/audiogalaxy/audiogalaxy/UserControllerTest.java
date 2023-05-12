@@ -177,6 +177,7 @@ public class UserControllerTest {
     @DisplayName("when user account is not active should return 404")
     public void shouldNotBeAbleToInactiveAcct() throws Exception {
         User loginRequest = new User("tim", "mm", "tim123");
+        loginRequest.setActive(false);
         when(userService.setUserToInactive(Mockito.any(LoginRequest.class))).thenThrow(new InformationInvalidException("not found"));
 
         MockHttpServletRequestBuilder mockRequest = put(endpoint + "login/")
@@ -191,11 +192,10 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("when user account is not active should return 200")
+    @DisplayName("when user account is active should return 200")
     public void shouldBeActiveUser() throws Exception {
         User loginRequest = new User("tim", "tim@hotmail.com", "tim123");
-        loginRequest.setActive(false);
-        when(userService.setUserToInactive(Mockito.any(LoginRequest.class))).thenThrow(new InformationInvalidException("you are not active"));
+        when(userService.userAccountIsActive(Mockito.any(LoginRequest.class))).thenReturn(true);
 
         MockHttpServletRequestBuilder mockRequest = put(endpoint + "login/")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -205,7 +205,6 @@ public class UserControllerTest {
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
                 .andDo(print());
-
     }
 
 

@@ -59,4 +59,12 @@ public class UserServiceTest {
         when(userRepository.findByEmail(anyString())).thenReturn(loginRequest);
         Assert.assertTrue(loginRequest.getActive());
     }
+
+    @Test
+    @DisplayName("update user account isActive to false")
+    public void setUserActiveAsInactive() {
+        User loginRequest = new User("tim", "tim@hotmail.com", "tim123");
+        when(userRepository.findByEmail(anyString())).thenReturn(loginRequest);
+        Assert.assertTrue(loginRequest.getActive());
+    }
 }
