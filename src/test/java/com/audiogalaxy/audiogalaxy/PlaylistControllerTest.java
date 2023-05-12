@@ -4,6 +4,7 @@ import com.audiogalaxy.audiogalaxy.controller.PlaylistController;
 import com.audiogalaxy.audiogalaxy.exception.InformationInvalidException;
 import com.audiogalaxy.audiogalaxy.exception.InformationNotFoundException;
 import com.audiogalaxy.audiogalaxy.model.Playlist;
+import com.audiogalaxy.audiogalaxy.model.Song;
 import com.audiogalaxy.audiogalaxy.model.User;
 import com.audiogalaxy.audiogalaxy.security.*;
 import com.audiogalaxy.audiogalaxy.security.MyUserDetailsService;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -114,6 +116,19 @@ public class PlaylistControllerTest {
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("return 200 and a list of songs that belong to a playlist")
+    public void shouldGetSongsFromPlaylistSuccessfully() throws Exception {
+        when(playlistService.getSongByPlaylistId(anyLong())).thenReturn(Arrays.asList(new Song("album", "song")));
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/api/playlists/1/");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
                 .andDo(print());
     }
 }
