@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+/**
+ * DataLoader class for loading user and playlist data.
+ * Implements the CommandLineRunner interface to execute the data loading process upon application startup.
+ */
 @Component
 public class UserPlaylistDataLoader implements CommandLineRunner {
 
@@ -17,14 +21,25 @@ public class UserPlaylistDataLoader implements CommandLineRunner {
     @Autowired
     PlaylistRepository playlistRepository;
 
+
+    /**
+     * Executes the data loading process upon application startup.
+     *
+     * @param args Command line arguments
+     * @throws Exception if an error occurs during the data loading process
+     */
     @Override
     public void run(String... args) throws Exception {
             loadUserPlaylistData();
     }
 
+    /**
+     * Loads user and playlist data if the playlist repository is empty.
+     */
     private void loadUserPlaylistData() {
         if (playlistRepository.count() == 0) {
             User user1 = new User("Dan","dan@gmail.com", "123456" );
+            userRepository.save(user1);
 
             Playlist playlist1 = new Playlist("Rock music", "Rock of ages");
             playlist1.setUser(user1);
@@ -39,6 +54,7 @@ public class UserPlaylistDataLoader implements CommandLineRunner {
             playlistRepository.save(playlist3);
 
             User user2 = new User("Emily","emily@gmail.com", "123456" );
+            userRepository.save(user2);
 
             Playlist playlist4 = new Playlist("Alternative Hits", "Smells Like Teen Spirit by Nirvana");
             playlist4.setUser(user2);
@@ -54,6 +70,7 @@ public class UserPlaylistDataLoader implements CommandLineRunner {
 
 
             User user3 = new User("Sally","sally@gmail.com", "123456" );
+            userRepository.save(user3);
 
             Playlist playlist7 = new Playlist("90s Hits", "No Diggity by Blackstreet ft. Dr. Dre");
             playlist7.setUser(user3);
