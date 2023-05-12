@@ -1,9 +1,7 @@
 package com.audiogalaxy.audiogalaxy.security;
 
-import com.audiogalaxy.audiogalaxy.exception.InformationNotFoundException;
 import com.audiogalaxy.audiogalaxy.model.User;
 import com.audiogalaxy.audiogalaxy.repository.UserRepository;
-import com.audiogalaxy.audiogalaxy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,7 +24,7 @@ public class MyUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isEmpty()) {
-            throw new InformationNotFoundException("User is is not found with email: " + email);
+            throw new UsernameNotFoundException("User is is not found with email: " + email);
         }
         return new MyUserDetails(user.get());
     }
