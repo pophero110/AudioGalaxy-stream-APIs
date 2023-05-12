@@ -2,6 +2,8 @@ package com.audiogalaxy.audiogalaxy.model;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="songs")
@@ -16,6 +18,9 @@ public class Song {
 
     @Column
     private String title;
+
+    @ManyToMany(mappedBy = "songs")
+    private List<Playlist> playlists = new ArrayList<>();
 
     public Song() {
     }

@@ -1,6 +1,8 @@
 package com.audiogalaxy.audiogalaxy.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "playlists")
@@ -19,6 +21,14 @@ public class Playlist {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToMany
+    @JoinTable(
+            name = "playlist_song",
+            joinColumns = @JoinColumn(name = "playlist_id"),
+            inverseJoinColumns = @JoinColumn(name = "song_id")
+    )
+    private List<Song> songs = new ArrayList<>();
 
     public Playlist() {
 
