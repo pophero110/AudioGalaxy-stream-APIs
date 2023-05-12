@@ -2,6 +2,7 @@ package com.audiogalaxy.audiogalaxy;
 
 import com.audiogalaxy.audiogalaxy.controller.UserController;
 import com.audiogalaxy.audiogalaxy.exception.InformationInvalidException;
+import com.audiogalaxy.audiogalaxy.exception.InformationNotFoundException;
 import com.audiogalaxy.audiogalaxy.model.User;
 import com.audiogalaxy.audiogalaxy.model.request.LoginRequest;
 import com.audiogalaxy.audiogalaxy.model.response.LoginResponse;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -29,9 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc
 @WebMvcTest(UserController.class)
-@Import(SecurityConfiguration.class)
+@Import(TestSecurityConfiguration.class)
 public class UserControllerTest {
 
     @Autowired
@@ -166,39 +165,42 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("when user account is not active should return 404")
-    public void shouldNotBeAbleToInactiveAcct() throws Exception {
-        User loginRequest = new User("tim", "tim@hotmail", "tim123");
-        loginRequest.setActive(false); // set user's account to inactive
-        when(userService.setUserToInactive(Mockito.any(LoginRequest.class))).thenReturn(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    @DisplayName("should login unsuccessfully when user account is inactive")
+    public void shouldLoginUnSuccessfullyWhenUserIsInactive() throws Exception {
+        User loginRequest = new User("tim", "tim@hotmail.com", "tim123");
+        when(userService.loginUser(Mockito.any(LoginRequest.class))).thenThrow(new InformationNotFoundException("The user account is inactive"));
 
-        MockHttpServletRequestBuilder mockRequest = put(endpoint + "login/")
+        MockHttpServletRequestBuilder mockRequest = post(endpoint + "login/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(loginRequest));
 
         mockMvc.perform(mockRequest)
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$.statusCodeValue").value(404))
+                .andExpect(status().isNotFound())
                 .andDo(print());
     }
 
     @Test
     @DisplayName("when user account is active should return 200")
-    public void shouldBeActiveUser() throws Exception {
-        User loginRequest = new User("tim", "tim@hotmail.com", "tim123");
-        when(userService.userAccountIsActive(Mockito.any(LoginRequest.class))).thenReturn(true);
+    public void deactivateUserSuccessfully() throws Exception {
+        when(userService.setUserToInactive()).thenReturn(new ResponseEntity<>(HttpStatus.OK));
 
-        MockHttpServletRequestBuilder mockRequest = put(endpoint + "login/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(loginRequest));
+        MockHttpServletRequestBuilder mockRequest = put(endpoint + "deactivate/");
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("when user account is inactive should return 404")
+    public void deactivateUserUnSuccessfully() throws Exception {
+        when(userService.setUserToInactive()).thenThrow(new InformationNotFoundException("The user account is inactive"));
 
+        MockHttpServletRequestBuilder mockRequest = put(endpoint + "deactivate/");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
 }
