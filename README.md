@@ -9,7 +9,7 @@ Streaming Music App That Is Out of This World!
 - [MVP](#mvp-------completed-------not-completed)
 - [ERD](#erd)
 - [REST Endpoints](#rest-endpoints)
-- [How To User Audio Galaxy Streaming API](#how-to-user-audio-galaxy-streaming-api)
+- [How To Install Dependencies](#how-to-user-audio-galaxy-streaming-api)
 - [Favorite Parts](#favorite-parts)
 - [Wins & Hurdles](#wins--hurdles)
 - [Languages Used](#languages-used)
@@ -119,8 +119,102 @@ consectetur, sem felis tristique odio, sit amet eleifend odio ligula vitae ex.
 
 ***
 
-## How To User Audio Galaxy Streaming API
+## How To Install Dependencies
 
+#### List of dependencies used
+ - SpringBoot
+   - Starter REST
+   - Dev Tools
+   - JPA
+   - Starter Security
+   - Plugin/Mavin
+ - H2 Database
+ - Junit
+ - JWT Token
+ - JJWT Jackson
+
+#### How to install dependencies
+Copy and paste the code below into your pom.xml file.  Once copied right mouse click on your pom.xml file and select
+Maven and then Reload project.  This will install the dependecnies.
+<br><br>
+
+```
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-rest</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.11.5</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.11.5</version>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-jackson -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.11.5</version>
+			<scope>runtime</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+
+
+
+```
 ***
 
 ## Favorite Parts
