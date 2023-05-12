@@ -1,6 +1,7 @@
 package com.audiogalaxy.audiogalaxy.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "playlists")
@@ -19,6 +20,9 @@ public class Playlist {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "playlist", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Song> songs;
 
     public Playlist() {
 

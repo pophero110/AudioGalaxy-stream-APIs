@@ -17,6 +17,10 @@ public class Song {
     @Column
     private String title;
 
+    @ManyToOne
+    @JoinColumn(name = "playlist_id")
+    private Playlist playlist;
+
     public Song() {
     }
 
