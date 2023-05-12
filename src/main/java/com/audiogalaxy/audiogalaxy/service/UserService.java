@@ -125,8 +125,8 @@ public class UserService {
 
     /**
      * Method updates username from current name to new name
-     * @param userObject  User data which contain updated name
-     * @return A response of 200 or message
+     * @param userObject User data which contain updated name
+     * @return Update User object when successful or error message
      */
     public User updateUsername(User userObject) {
         // get name user to update
