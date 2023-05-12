@@ -2,6 +2,7 @@ package com.audiogalaxy.audiogalaxy;
 
 import com.audiogalaxy.audiogalaxy.controller.UserController;
 import com.audiogalaxy.audiogalaxy.exception.InformationInvalidException;
+import com.audiogalaxy.audiogalaxy.exception.InformationNotFoundException;
 import com.audiogalaxy.audiogalaxy.model.User;
 import com.audiogalaxy.audiogalaxy.model.request.LoginRequest;
 import com.audiogalaxy.audiogalaxy.model.response.LoginResponse;
@@ -12,24 +13,24 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc
 @WebMvcTest(UserController.class)
-@Import(SecurityConfiguration.class)
+@Import(TestSecurityConfiguration.class)
 public class UserControllerTest {
 
     @Autowired
@@ -49,7 +50,6 @@ public class UserControllerTest {
 
    @Autowired
     private JwtRequestFilter jwtRequestFilter;
-
 
 
     private final String endpoint = "/api/users/";
@@ -161,6 +161,46 @@ public class UserControllerTest {
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("should login unsuccessfully when user account is inactive")
+    public void shouldLoginUnSuccessfullyWhenUserIsInactive() throws Exception {
+        User loginRequest = new User("tim", "tim@hotmail.com", "tim123");
+        when(userService.loginUser(Mockito.any(LoginRequest.class))).thenThrow(new InformationNotFoundException("The user account is inactive"));
+
+        MockHttpServletRequestBuilder mockRequest = post(endpoint + "login/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(loginRequest));
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("when user account is active should return 200")
+    public void deactivateUserSuccessfully() throws Exception {
+        when(userService.setUserToInactive()).thenReturn(new ResponseEntity<>(HttpStatus.OK));
+
+        MockHttpServletRequestBuilder mockRequest = put(endpoint + "deactivate/");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("when user account is inactive should return 404")
+    public void deactivateUserUnSuccessfully() throws Exception {
+        when(userService.setUserToInactive()).thenThrow(new InformationNotFoundException("The user account is inactive"));
+
+        MockHttpServletRequestBuilder mockRequest = put(endpoint + "deactivate/");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isNotFound())
                 .andDo(print());
     }
 }

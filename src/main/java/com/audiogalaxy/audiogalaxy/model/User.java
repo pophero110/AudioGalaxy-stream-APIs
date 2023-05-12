@@ -24,6 +24,9 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @Column
+    private Boolean isActive = true;
+
     @OneToMany(mappedBy = "user")
     private List<Playlist> playlists;
 
@@ -53,6 +56,10 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public void setActive(Boolean active) { isActive = active;}
+
+    public Boolean getActive() { return isActive;}
 
     public Long getId() {
         return id;
