@@ -43,7 +43,7 @@ public class UserController {
         return ResponseEntity.ok(userService.loginUser(loginRequest));
     }
 
-    @PutMapping(path="/users/")
+    @PutMapping(path="/users/deactivate/")
     public ResponseEntity<?> setUserToInactive() throws Exception {
         return ResponseEntity.ok(userService.setUserToInactive());
     }
