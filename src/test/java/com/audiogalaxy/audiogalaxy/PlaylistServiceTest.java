@@ -130,4 +130,12 @@ public class PlaylistServiceTest {
 
         Assertions.assertEquals(2, playlistSongs.size());
     }
+
+    @Test
+    @DisplayName("throw an exception if the playlist is not found")
+    public void testGetSongsByPlaylistIdUnsuccessfully() {
+        when(playlistRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(InformationNotFoundException.class, () -> playlistService.getSongByPlaylistId(2l));
+    }
 }
