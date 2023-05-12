@@ -63,6 +63,12 @@ public class UserController {
         return ResponseEntity.ok(userService.setUserToInactive());
     }
 
+    /**
+     * Method handles calling user service for updating username
+     * @param userObject Currently logged-in username name
+     * @return Updated User object.
+     * @throws Exception if there's an error during updating
+     */
     @PutMapping(path="/users/profile/")
     public User updateUserName(@RequestBody User userObject) throws Exception {
         return userService.updateUsername(userObject);

@@ -85,13 +85,21 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("ensure user is the correct user to update username and not blank")
-    public void updateUserName() {
+    @DisplayName("check if user is not blank")
+    public void updateUserNameNotBlank() {
         User activeUser = new User("tim", "tim@hotmail.com", "tim123");
         when(userContext.getCurrentLoggedInUser()).thenReturn(activeUser);
 
-        Assertions.assertEquals(activeUser.getName(), "tim");
+        Assertions.assertFalse(activeUser.getName().isBlank(), "Username cannot be blank");
+    }
 
+    @Test
+    @DisplayName("check if user is a valid username")
+    public void updateUserNameIsValid() {
+        User activeUser = new User("timtim", "tim@hotmail.com", "tim123");
+        when(userContext.getCurrentLoggedInUser()).thenReturn(activeUser);
+
+        Assertions.assertFalse(activeUser.getName().length() < 5, "Username must be greater than five characters.");
     }
 
 }
