@@ -138,6 +138,16 @@ Through collaboration, we reached a consensus on the following list, which we pr
 - We are proud of the significant progress we made within the set timeframe we had.
 
 #### <ins>Hurdles</ins>
+As a team, we encountered the following list of hurdles during this project.
+
+ - <b>Working as a team with varying levels of experience:</b> We faced the challenge of leveraging each team member's 
+ strengths and effectively assigning tasks accordingly.
+
+ - <b>Testing controllers without authentication:</b> One of our obstacles was finding a way to test the 
+controllers without the need for authentication.
+
+ - <b>Project management using Git:</b> We encountered difficulties in managing the project collaboratively using Git.
+<br>
 
 ***
 
