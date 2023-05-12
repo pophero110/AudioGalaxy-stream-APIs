@@ -3,6 +3,7 @@ package com.audiogalaxy.audiogalaxy;
 import com.audiogalaxy.audiogalaxy.exception.InformationInvalidException;
 import com.audiogalaxy.audiogalaxy.exception.InformationNotFoundException;
 import com.audiogalaxy.audiogalaxy.model.Playlist;
+import com.audiogalaxy.audiogalaxy.model.Song;
 import com.audiogalaxy.audiogalaxy.model.User;
 import com.audiogalaxy.audiogalaxy.repository.PlaylistRepository;
 import com.audiogalaxy.audiogalaxy.security.MyUserDetails;
@@ -23,6 +24,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -112,5 +114,20 @@ public class PlaylistServiceTest {
 
         // call the method under test
         Assertions.assertThrows(InformationNotFoundException.class, () -> playlistService.getPlaylists());
+    }
+
+    @Test
+    @DisplayName("return a list of songs that belong to a specific playlist")
+    public void testGetSongsByPlaylistIdSuccessfully() {
+        // set a playlist and add song to it
+        Playlist playlist = new Playlist("rock music", "description");
+        playlist.getSongs().add(new Song("Champion's Journey", "Champion"));
+        playlist.getSongs().add(new Song("Champion's Journey", "Unstoppable Spirit"));
+
+        when(playlistRepository.findById(anyLong())).thenReturn(Optional.of(playlist));
+
+        List<Song> playlistSongs = playlistService.getSongByPlaylistId(2l);
+
+        Assertions.assertEquals(2, playlistSongs.size());
     }
 }
