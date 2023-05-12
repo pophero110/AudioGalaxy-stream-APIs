@@ -60,4 +60,8 @@ public class Playlist {
     public User getUser() {
         return user;
     }
+
+    public List<Song> getSongs() {
+        return songs;
+    }
 }
