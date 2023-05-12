@@ -19,12 +19,12 @@ Streaming Music App That Is Out of This World!
 
 ## Project Overview
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla hendrerit purus ut nibh sollicitudin,
-et commodo ipsum malesuada. Fusce vel malesuada velit. Vivamus quis ipsum at leo fringilla condimentum.
-Maecenas a tortor at odio viverra aliquet. Curabitur sed odio convallis, congue est id, pellentesque elit.
-Aenean interdum lacus ac odio fringilla cursus. Quisque gravida sapien ut risus aliquam, eu dignissim lectus
-venenatis. Nunc convallis est vitae semper convallis. Suspendisse potenti. Mauris nec nulla risus.
-
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vitae ultricies ligula. Nulla ac 
+nunc et nunc maximus tincidunt. Fusce elementum auctor neque non pharetra. Sed tristique lobortis mauris, 
+nec fringilla odio finibus nec. Curabitur lobortis bibendum quam, ac suscipit ligula commodo eu. Mauris in 
+ligula malesuada, venenatis ex id, iaculis nunc. Integer gravida ante sed lorem posuere sollicitudin. 
+Vestibulum accumsan euismod dolor, ut pellentesque justo consequat nec. Nam tristique, odio et dignissim 
+consectetur, sem felis tristique odio, sit amet eleifend odio ligula vitae ex.
 ***
 
 ## Project Planning
@@ -76,7 +76,7 @@ venenatis. Nunc convallis est vitae semper convallis. Suspendisse potenti. Mauri
 2. The environment settings should be using Spring Profiles.  - ✓
 3. Use a combination of Spring Security and JWT Tokens.  - ✓
 4. The routes should be protected by JWT except for login/register.  - ✓
-5. A minimum of 1 API point that is fully CRUD operable.  - ✗
+5. A minimum of 1 REST API point that is fully CRUD operable.  - ✗
 6. API endpoints must be able to perform CRUD based on business use-case.  - ✗
 7. Provide CRUD routes that were built based on rest conventions to be a part of the API.  - ✓
 8. Have graceful exception handling in place.  - ✓
@@ -128,6 +128,16 @@ venenatis. Nunc convallis est vitae semper convallis. Suspendisse potenti. Mauri
 ***
 
 ## Wins & Hurdles
+
+#### <ins>Wins</ins>
+Through collaboration, we reached a consensus on the following list, which we proudly consider to be our wins for this project. 
+
+- We each acquired valuable experience and knowledge while conducting pair programming.
+- We recognize the importance of efficient time management when collaborating with a team.
+- We developed the ability to effectively priority user stories, enabling us to successfully reach the Minimum Viable Product (MVP).
+- We are proud of the significant progress we made within the set timeframe we had.
+
+#### <ins>Hurdles</ins>
 
 ***
 
