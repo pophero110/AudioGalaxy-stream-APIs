@@ -19,13 +19,12 @@ Streaming Music App That Is Out of This World!
 
 ## Project Overview
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vitae ultricies ligula. Nulla ac 
-nunc et nunc maximus tincidunt. Fusce elementum auctor neque non pharetra. Sed tristique lobortis mauris, 
-nec fringilla odio finibus nec. Curabitur lobortis bibendum quam, ac suscipit ligula commodo eu. Mauris in 
-ligula malesuada, venenatis ex id, iaculis nunc. Integer gravida ante sed lorem posuere sollicitudin. 
-Vestibulum accumsan euismod dolor, ut pellentesque justo consequat nec. Nam tristique, odio et dignissim 
-consectetur, sem felis tristique odio, sit amet eleifend odio ligula vitae ex.
-***
+This was a group project which consisted of 3 group members [Jeff Ou](https://www.linkedin.com/in/jiajin-ou-87330a1b1/), [Wanda Avery](https://github.com/wmsimien) & [Pamela Afaneh](https://www.linkedin.com/in/pam-afaneh/). 
+The goal of the project was to create a REST Api that consisted of 3 models with Spring Security and JWT Tokens. The chosen theme for the app was inspired by Spotify.  We arrived on the name of our App to being Audio Galaxy Streaming App.
+
+The App provides the user the ability to complete CRUD actions by creating an account, creating a playlist 
+as well as adding/updating & deleting songs to their created playlists.
+
 
 ## Project Planning
 
@@ -252,4 +251,5 @@ controllers without the need for authentication.
 ***
 
 ## Works Sited
-We utilized this [tool](https://app.diagrams.net/) for creating ERD diagrams - [Google Diagrams](https://app.diagrams.net/)
+We utilized this [tool](https://app.diagrams.net/) for creating ERD diagrams - [Google Diagrams](https://app.diagrams.net/)<br>
+We were inspired by [Spotify](http://spotify.com) for our app.
