@@ -53,6 +53,10 @@ public class Playlist {
         return description;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public void setUser(User user) {
         this.user = user;
     }
