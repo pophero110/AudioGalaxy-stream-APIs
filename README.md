@@ -1,5 +1,5 @@
 # Audio Galaxy Streaming API
-Streaming Music App That Is Out of This World!
+A Streaming Music App That Is Out of This World!
 
 ## Tables of Contents
 
@@ -9,7 +9,7 @@ Streaming Music App That Is Out of This World!
 - [MVP](#mvp-------completed-------not-completed)
 - [ERD](#erd)
 - [REST Endpoints](#rest-endpoints)
-- [How To Install Dependencies](#how-to-user-audio-galaxy-streaming-api)
+- [How To Install Dependencies](#how-to-install-dependencies)
 - [Favorite Parts](#favorite-parts)
 - [Wins & Hurdles](#wins--hurdles)
 - [Languages Used](#languages-used)
@@ -217,6 +217,13 @@ Maven and then Reload project.  This will install the dependecnies.
 ***
 
 ## Favorite Parts
+
+
+<ins><b>Jeff's</b></ins> favorite part was reaching the MVP milestone and successfully completing the project.<br>
+
+<ins><b>Wanda's</b></ins> favorite part was overcoming testing challenges and seeing the tests pass upon completion.<br>
+
+<ins><b>Pam's</b></ins> favorite part was being a part of this team, as it provided her with valuable learning opportunities.<br>
 
 ***
 
