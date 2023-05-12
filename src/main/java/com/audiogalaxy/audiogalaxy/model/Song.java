@@ -39,6 +39,14 @@ public class Song {
         this.id = id;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAlbum_name() {
+        return album_name;
+    }
+
     @Override
     public String toString() {
         return "Song{" +
