@@ -21,6 +21,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -201,6 +203,38 @@ public class UserControllerTest {
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("when logged in user updates username")
+    public void updateUserNameNotBlank() throws Exception {
+        User loggedInUser = new User("", "tim@hotmail.com", "tim123");
+        when(userService.updateUsername(Mockito.any(User.class))).thenThrow(new InformationInvalidException("Username cannot be blank"));
+
+        MockHttpServletRequestBuilder mockRequest = put(endpoint + "profile/")
+        .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(loggedInUser));
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("when logged in user updates username")
+    public void updateUserNameSuccess() throws Exception {
+        User loggedInUser = new User("tim2", "tim@hotmail.com", "tim123");
+        when(userService.updateUsername(Mockito.any(User.class))).thenReturn(new ResponseEntity<>(HttpStatus.OK));
+
+        MockHttpServletRequestBuilder mockRequest = put(endpoint + "profile/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(loggedInUser));;
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 }

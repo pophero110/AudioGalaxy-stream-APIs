@@ -62,4 +62,9 @@ public class UserController {
     public ResponseEntity<?> setUserToInactive() throws Exception {
         return ResponseEntity.ok(userService.setUserToInactive());
     }
+
+    @PutMapping(path="/users/profile/")
+    public ResponseEntity<?> updateUserName(@RequestBody User userObject) throws Exception {
+        return ResponseEntity.ok(userService.updateUsername(userObject));
+    }
 }

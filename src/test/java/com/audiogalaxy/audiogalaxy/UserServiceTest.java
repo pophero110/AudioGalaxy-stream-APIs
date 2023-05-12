@@ -83,4 +83,8 @@ public class UserServiceTest {
 
         Assertions.assertThrows(InformationNotFoundException.class, () -> userService.setUserToInactive());
     }
+
+
+
+
 }
