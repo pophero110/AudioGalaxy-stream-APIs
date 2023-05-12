@@ -133,12 +133,9 @@ public class UserService {
         String updatedName = userObject.getName();
         if (!updatedName.isBlank()) {
             User currentlyLoggedInUser = userContext.getCurrentLoggedInUser();
-            // current user must be the same user as user of updated name
-            if (userObject.getId() == currentlyLoggedInUser.getId()) {
-                currentlyLoggedInUser.setName(updatedName);
-                userRepository.save(currentlyLoggedInUser);
-                return currentlyLoggedInUser;
-            }
+            currentlyLoggedInUser.setName(updatedName);
+            userRepository.save(currentlyLoggedInUser);
+            return currentlyLoggedInUser;
         }
         throw new InformationInvalidException("User name cannot be blank.");
     }
