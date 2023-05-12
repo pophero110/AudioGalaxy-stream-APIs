@@ -43,9 +43,9 @@ public class UserController {
         return ResponseEntity.ok(userService.loginUser(loginRequest));
     }
 
-    @PutMapping(path="/users/login/")
-    public ResponseEntity<?> setUserToInactive(@RequestBody LoginRequest loginRequest) throws Exception {
-        return ResponseEntity.ok(userService.setUserToInactive(loginRequest));
+    @PutMapping(path="/users/")
+    public ResponseEntity<?> setUserToInactive() throws Exception {
+        return ResponseEntity.ok(userService.setUserToInactive());
     }
 
 
