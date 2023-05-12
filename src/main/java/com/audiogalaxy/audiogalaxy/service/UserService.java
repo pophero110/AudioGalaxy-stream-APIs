@@ -128,7 +128,7 @@ public class UserService {
      * @param userObject  User data which contain updated name
      * @return A response of 200 or message
      */
-    public ResponseEntity<?> updateUsername(User userObject) {
+    public User updateUsername(User userObject) {
         // get name user to update
         String updatedName = userObject.getName();
         if (!updatedName.isBlank()) {
@@ -137,7 +137,7 @@ public class UserService {
             if (userObject.getId() == currentlyLoggedInUser.getId()) {
                 currentlyLoggedInUser.setName(updatedName);
                 userRepository.save(currentlyLoggedInUser);
-                return new ResponseEntity<>(HttpStatus.OK);
+                return currentlyLoggedInUser;
             }
         }
         throw new InformationInvalidException("User name cannot be blank.");

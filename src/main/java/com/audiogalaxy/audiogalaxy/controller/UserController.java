@@ -64,7 +64,7 @@ public class UserController {
     }
 
     @PutMapping(path="/users/profile/")
-    public ResponseEntity<?> updateUserName(@RequestBody User userObject) throws Exception {
-        return ResponseEntity.ok(userService.updateUsername(userObject));
+    public User updateUserName(@RequestBody User userObject) throws Exception {
+        return userService.updateUsername(userObject);
     }
 }

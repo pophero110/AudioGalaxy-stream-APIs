@@ -207,7 +207,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("when logged in user updates username")
+    @DisplayName("when logged in user updates username with a blank")
     public void updateUserNameNotBlank() throws Exception {
         User loggedInUser = new User("", "tim@hotmail.com", "tim123");
         when(userService.updateUsername(Mockito.any(User.class))).thenThrow(new InformationInvalidException("Username cannot be blank"));
@@ -223,10 +223,10 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("when logged in user updates username")
+    @DisplayName("when logged in user updates username with a valid name")
     public void updateUserNameSuccess() throws Exception {
         User loggedInUser = new User("tim2", "tim@hotmail.com", "tim123");
-        when(userService.updateUsername(Mockito.any(User.class))).thenReturn(new ResponseEntity<>(HttpStatus.OK));
+        when(userService.updateUsername(Mockito.any(User.class))).thenReturn(loggedInUser);
 
         MockHttpServletRequestBuilder mockRequest = put(endpoint + "profile/")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -235,6 +235,8 @@ public class UserControllerTest {
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
+                .andExpect((jsonPath("$", notNullValue())))
+                .andExpect((jsonPath("$.name")).value(loggedInUser.getName()))
                 .andDo(print());
     }
 }
