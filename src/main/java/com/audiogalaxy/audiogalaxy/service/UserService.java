@@ -106,21 +106,23 @@ public class UserService {
         }
     }
 
-    public Optional<User> setUserIsActiveToFalse(LoginRequest loginRequest) throws InformationInvalidException {
-        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(loginRequest.getEmail()));
-        if (user.isPresent()) {
-            user.get().setActive(false);
-            userRepository.save(user.get());
-            return user;
-        } else {
-            throw new InformationInvalidException("user account not found");
-        }
-    }
+//    public Optional<User> setUserIsActiveToFalse(LoginRequest loginRequest) throws InformationInvalidException {
+//        if (userAccountIsActive(loginRequest)) {
+//            Optional<User> user = Optional.ofNullable(userRepository.findByEmail(loginRequest.getEmail()));
+//            if (user.isPresent()) {
+//                user.get().setActive(false);
+//                userRepository.save(user.get());
+//                return user;
+//            } else {
+//                throw new InformationInvalidException("user account not found");
+//            }
+//        }
+//        return Optional.ofNullable(userRepository.findByEmail(loginRequest.getEmail()));
+//    }
 
     public Boolean userAccountIsActive(LoginRequest loginRequest) throws InformationInvalidException {
         User activeUser = userRepository.findByEmail(loginRequest.getEmail());
         return activeUser.getActive();
     }
-
 
 }

@@ -20,16 +20,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-
-import java.util.Optional;
-
 import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.notNull;
 import static org.mockito.Mockito.when;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -58,7 +51,6 @@ public class UserControllerTest {
 
    @Autowired
     private JwtRequestFilter jwtRequestFilter;
-
 
 
     private final String endpoint = "/api/users/";
@@ -176,9 +168,9 @@ public class UserControllerTest {
     @Test
     @DisplayName("when user account is not active should return 404")
     public void shouldNotBeAbleToInactiveAcct() throws Exception {
-        User loginRequest = new User("tim", "mm", "tim123");
-        loginRequest.setActive(false);
-        when(userService.setUserToInactive(Mockito.any(LoginRequest.class))).thenThrow(new InformationInvalidException("not found"));
+        User loginRequest = new User("tim", "tim@hotmail", "tim123");
+        loginRequest.setActive(false); // set user's account to inactive
+        when(userService.setUserToInactive(Mockito.any(LoginRequest.class))).thenReturn(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
         MockHttpServletRequestBuilder mockRequest = put(endpoint + "login/")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -186,9 +178,10 @@ public class UserControllerTest {
                 .content(mapper.writeValueAsString(loginRequest));
 
         mockMvc.perform(mockRequest)
-                .andExpect(status().isNotFound())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.statusCodeValue").value(404))
                 .andDo(print());
-
     }
 
     @Test
