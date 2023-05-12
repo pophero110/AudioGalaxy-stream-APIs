@@ -3,8 +3,8 @@ A Streaming Music App That Is Out of This World!
 
 ## Tables of Contents
 
-- [Project Planning](#project-planning)
 - [Project Overview](#project-overview)
+- [Project Planning](#project-planning)
 - [User Stories](#user-stories)
 - [MVP](#mvp-------completed-------not-completed)
 - [ERD](#erd)
@@ -19,11 +19,11 @@ A Streaming Music App That Is Out of This World!
 
 ## Project Overview
 
-This was a group project which consisted of 3 group members [Jeff Ou](https://www.linkedin.com/in/jiajin-ou-87330a1b1/), [Wanda Avery](https://github.com/wmsimien) & [Pamela Afaneh](https://www.linkedin.com/in/pam-afaneh/). 
-The goal of the project was to create a REST Api that consisted of 3 models with Spring Security and JWT Tokens. The chosen theme for the app was inspired by Spotify.  We arrived on the name of our App to being Audio Galaxy Streaming App.
+This was a group project which consisted of 3 group members [Jeff Ou](https://www.linkedin.com/in/jiajin-ou-87330a1b1/), [Wanda Avery](https://linkedin.com/in/wanda-simien-avery-48588a1bb) & [Pamela Afaneh](https://www.linkedin.com/in/pam-afaneh/). 
+The goal of the project was to create a REST API that consisted of 3 models with Spring Security and JWT Tokens. The chosen theme for the app was inspired by Spotify.  We arrived at the name of our App to be Audio Galaxy Streaming App.
 
-The App provides the user the ability to complete CRUD actions by creating an account, creating a playlist 
-as well as adding/updating & deleting songs to their created playlists.
+Users can interact with the app to conduct CRUD action by creating an account, as well as adding,updating and deleting songs from their created playlist.
+
 
 
 ## Project Planning
@@ -234,7 +234,7 @@ Through collaboration, we reached a consensus on the following list, which we pr
 
 - We each acquired valuable experience and knowledge while conducting pair programming.
 - We recognize the importance of efficient time management when collaborating with a team.
-- We developed the ability to effectively priority user stories, enabling us to successfully reach the Minimum Viable Product (MVP).
+- We developed the ability to effectively prioritize user stories, enabling us to successfully reach the Minimum Viable Product (MVP).
 - We are proud of the significant progress we made within the set timeframe we had.
 
 #### <ins>Hurdles</ins>
