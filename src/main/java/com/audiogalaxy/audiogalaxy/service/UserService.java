@@ -122,4 +122,22 @@ public class UserService {
             throw new InformationNotFoundException("The user account is inactive");
         }
     }
+
+    /**
+     * Method updates username from current name to new name
+     * @param userObject User data which contain updated name
+     * @return Update User object when successful or error message
+     */
+    public User updateUsername(User userObject) {
+        // get name user to update
+        String updatedName = userObject.getName();
+        if (!updatedName.isBlank()) {
+            User currentlyLoggedInUser = userContext.getCurrentLoggedInUser();
+            currentlyLoggedInUser.setName(updatedName);
+            userRepository.save(currentlyLoggedInUser);
+            return currentlyLoggedInUser;
+        }
+        throw new InformationInvalidException("User name cannot be blank.");
+    }
+
 }
