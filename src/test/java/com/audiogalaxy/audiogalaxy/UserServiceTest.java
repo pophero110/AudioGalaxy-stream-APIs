@@ -84,7 +84,15 @@ public class UserServiceTest {
         Assertions.assertThrows(InformationNotFoundException.class, () -> userService.setUserToInactive());
     }
 
+    @Test
+    @DisplayName("ensure user is the correct user to update username and not blank")
+    public void updateUserName() {
+        User activeUser = new User("tim", "tim@hotmail.com", "tim123");
+        when(userContext.getCurrentLoggedInUser()).thenReturn(activeUser);
 
+        Assertions.assertTrue(activeUser.getId() == userContext.getCurrentLoggedInUser().getId());
+        Assertions.assertEquals(activeUser.getName(), "tim");
 
+    }
 
 }
