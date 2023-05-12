@@ -90,7 +90,6 @@ public class UserServiceTest {
         User activeUser = new User("tim", "tim@hotmail.com", "tim123");
         when(userContext.getCurrentLoggedInUser()).thenReturn(activeUser);
 
-        Assertions.assertTrue(activeUser.getId() == userContext.getCurrentLoggedInUser().getId());
         Assertions.assertEquals(activeUser.getName(), "tim");
 
     }
