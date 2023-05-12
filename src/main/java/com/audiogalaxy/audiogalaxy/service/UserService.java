@@ -106,21 +106,13 @@ public class UserService {
         }
     }
 
-//    public Optional<User> setUserIsActiveToFalse(LoginRequest loginRequest) throws InformationInvalidException {
-//        if (userAccountIsActive(loginRequest)) {
-//            Optional<User> user = Optional.ofNullable(userRepository.findByEmail(loginRequest.getEmail()));
-//            if (user.isPresent()) {
-//                user.get().setActive(false);
-//                userRepository.save(user.get());
-//                return user;
-//            } else {
-//                throw new InformationInvalidException("user account not found");
-//            }
-//        }
-//        return Optional.ofNullable(userRepository.findByEmail(loginRequest.getEmail()));
-//    }
-
-    public Boolean userAccountIsActive(LoginRequest loginRequest) throws InformationInvalidException {
+    /**
+     * Method handles setting a user's account to inactive (isActive = false)
+     * @param loginRequest Logged in user
+     * @return The value of isActive (true or false)
+     *
+     */
+    public Boolean userAccountIsActive(LoginRequest loginRequest)  {
         User activeUser = userRepository.findByEmail(loginRequest.getEmail());
         return activeUser.getActive();
     }
