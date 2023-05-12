@@ -3,7 +3,7 @@ Streaming Music App That Is Out of This World!
 
 ## Tables of Contents
 
-- [Project Planning](https://github.com/users/pophero110/projects/7)
+- [Project Planning](#project-planning)
 - [Project Overview](#project-overview)
 - [User Stories](#user-stories)
 - [MVP](#mvp-------completed-------not-completed)
@@ -16,15 +16,30 @@ Streaming Music App That Is Out of This World!
 - [Works Sited](#works-sited)
 
 ***
+
 ## Project Overview
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla hendrerit purus ut nibh sollicitudin, 
-et commodo ipsum malesuada. Fusce vel malesuada velit. Vivamus quis ipsum at leo fringilla condimentum. 
-Maecenas a tortor at odio viverra aliquet. Curabitur sed odio convallis, congue est id, pellentesque elit. 
-Aenean interdum lacus ac odio fringilla cursus. Quisque gravida sapien ut risus aliquam, eu dignissim lectus 
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla hendrerit purus ut nibh sollicitudin,
+et commodo ipsum malesuada. Fusce vel malesuada velit. Vivamus quis ipsum at leo fringilla condimentum.
+Maecenas a tortor at odio viverra aliquet. Curabitur sed odio convallis, congue est id, pellentesque elit.
+Aenean interdum lacus ac odio fringilla cursus. Quisque gravida sapien ut risus aliquam, eu dignissim lectus
 venenatis. Nunc convallis est vitae semper convallis. Suspendisse potenti. Mauris nec nulla risus.
 
+***
 
+## Project Planning
+
+### Progress Snapshot 1
+![Kanban Board 1](./img/kanban1.png)<br><br>
+
+### Progress Snapshot 2
+![Kanban Board 2](./img/kanban2.png)<br><br>
+
+### Progress Snapshot 3
+![Kanban Board 3](./img/kanban3.png)<br><br>
+
+
+[View Planning Kanban Board](https://github.com/users/pophero110/projects/7)
 
 ***
 
@@ -77,10 +92,10 @@ venenatis. Nunc convallis est vitae semper convallis. Suspendisse potenti. Mauri
 ## ERD
 
 #### User & Playlist ERD <br>
-![User & Playlist ERD](./User_Library_ERD.jpg)<br><br>
+![User & Playlist ERD](./img/User_Library_ERD.jpg)<br><br>
 
 #### Playlist & Song ERD <br>
-![Playlist & Song ERD](./Playlist_Song-ERD.jpg)<br><br>
+![Playlist & Song ERD](./img/Playlist_Song-ERD.jpg)<br><br>
 [ERD Resource Link](https://drive.google.com/file/d/1aKHH1yrHc_hTh5BsFtUyS7XPm4ydv1Rg/view?usp=sharing)
 
 ***
