@@ -4,8 +4,10 @@ import com.audiogalaxy.audiogalaxy.model.Playlist;
 import com.audiogalaxy.audiogalaxy.model.User;
 import com.audiogalaxy.audiogalaxy.repository.PlaylistRepository;
 import com.audiogalaxy.audiogalaxy.repository.UserRepository;
+import com.audiogalaxy.audiogalaxy.security.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,6 +22,9 @@ public class UserPlaylistDataLoader implements CommandLineRunner {
 
     @Autowired
     PlaylistRepository playlistRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
 
     /**
@@ -38,7 +43,8 @@ public class UserPlaylistDataLoader implements CommandLineRunner {
      */
     private void loadUserPlaylistData() {
         if (playlistRepository.count() == 0) {
-            User user1 = new User("Dan","dan@gmail.com", "123456" );
+            String password = passwordEncoder.encode("123456");
+            User user1 = new User("Dan","dan@gmail.com", password );
             userRepository.save(user1);
 
             Playlist playlist1 = new Playlist("Rock music", "Rock of ages");
@@ -53,7 +59,7 @@ public class UserPlaylistDataLoader implements CommandLineRunner {
             playlist3.setUser(user1);
             playlistRepository.save(playlist3);
 
-            User user2 = new User("Emily","emily@gmail.com", "123456" );
+            User user2 = new User("Emily","emily@gmail.com", password );
             userRepository.save(user2);
 
             Playlist playlist4 = new Playlist("Alternative Hits", "Smells Like Teen Spirit by Nirvana");
@@ -69,7 +75,7 @@ public class UserPlaylistDataLoader implements CommandLineRunner {
             playlistRepository.save(playlist6);
 
 
-            User user3 = new User("Sally","sally@gmail.com", "123456" );
+            User user3 = new User("Sally","sally@gmail.com", password );
             userRepository.save(user3);
 
             Playlist playlist7 = new Playlist("90s Hits", "No Diggity by Blackstreet ft. Dr. Dre");
