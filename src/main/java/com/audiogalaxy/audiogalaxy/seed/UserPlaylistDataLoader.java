@@ -1,14 +1,19 @@
 package com.audiogalaxy.audiogalaxy.seed;
 
 import com.audiogalaxy.audiogalaxy.model.Playlist;
+import com.audiogalaxy.audiogalaxy.model.Song;
 import com.audiogalaxy.audiogalaxy.model.User;
 import com.audiogalaxy.audiogalaxy.repository.PlaylistRepository;
+import com.audiogalaxy.audiogalaxy.repository.SongRepository;
 import com.audiogalaxy.audiogalaxy.repository.UserRepository;
 import com.audiogalaxy.audiogalaxy.security.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * DataLoader class for loading user and playlist data.
@@ -25,6 +30,9 @@ public class UserPlaylistDataLoader implements CommandLineRunner {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    SongRepository songRepository;
 
 
     /**
@@ -89,6 +97,49 @@ public class UserPlaylistDataLoader implements CommandLineRunner {
             Playlist playlist9 = new Playlist("Motivation Mix", "Eye of the Tiger by Survivor");
             playlist9.setUser(user3);
             playlistRepository.save(playlist9);
+
+            //Create Songs
+            Song song1 = new Song("Fearless", "Love Story");
+            songRepository.save(song1);
+
+            Song song2 = new Song("One Thing at a Time", "Last Night");
+            songRepository.save(song2);
+
+            Song song3 = new Song("D-Day", "Snooze");
+            songRepository.save(song3);
+
+
+            // Associate songs with playlists
+            playlist1.addSong(song1);
+            playlist1.addSong(song2);
+            playlistRepository.save(playlist1);
+
+            playlist2.addSong(song2);
+            playlist2.addSong(song3);
+            playlistRepository.save(playlist2);
+
+            playlist3.addSong(song1);
+            playlist3.addSong(song3);
+            playlistRepository.save(playlist3);
+
+            // Associate playlists with users
+            List<Playlist> user1Playlists = new ArrayList<>();
+            user1Playlists.add(playlist1);
+            user1Playlists.add(playlist2);
+            user1.setPlaylists(user1Playlists);
+            userRepository.save(user1);
+
+            List<Playlist> user2Playlists = new ArrayList<>();
+            user2Playlists.add(playlist2);
+            user2Playlists.add(playlist3);
+            user2.setPlaylists(user2Playlists);
+            userRepository.save(user2);
+
+            List<Playlist> user3Playlists = new ArrayList<>();
+            user3Playlists.add(playlist1);
+            user3Playlists.add(playlist3);
+            user3.setPlaylists(user3Playlists);
+            userRepository.save(user3);
 
         }
     }

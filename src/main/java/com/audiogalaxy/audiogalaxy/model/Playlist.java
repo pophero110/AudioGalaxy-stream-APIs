@@ -30,6 +30,8 @@ public class Playlist {
     )
     private List<Song> songs = new ArrayList<>();
 
+
+
     public Playlist() {
 
     }
@@ -65,7 +67,17 @@ public class Playlist {
         return user;
     }
 
+
     public List<Song> getSongs() {
         return songs;
+
+            }
+
+    public void addSong (Song song){
+        if (songs == null) {
+            songs = new ArrayList<>();
+        }
+        songs.add(song);
     }
+
 }

@@ -38,6 +38,7 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
     public String getName() {
         return name;
     }
@@ -57,15 +58,24 @@ public class User {
         this.password = password;
     }
 
-    public void setActive(Boolean active) { isActive = active;}
 
-    public Boolean getActive() { return isActive;}
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
 
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
-        this.id = id;
+
+    }
+
+    public void setPlaylists(List<Playlist> playlists) {
+        this.playlists = playlists;
     }
 }
