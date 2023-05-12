@@ -1,6 +1,7 @@
 package com.audiogalaxy.audiogalaxy.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,8 +22,13 @@ public class Playlist {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "playlist", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Song> songs;
+    @ManyToMany
+    @JoinTable(
+            name = "playlist_song",
+            joinColumns = @JoinColumn(name = "playlist_id"),
+            inverseJoinColumns = @JoinColumn(name = "song_id")
+    )
+    private List<Song> songs = new ArrayList<>();
 
     public Playlist() {
 
@@ -47,11 +53,19 @@ public class Playlist {
         return description;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public void setUser(User user) {
         this.user = user;
     }
 
     public User getUser() {
         return user;
+    }
+
+    public List<Song> getSongs() {
+        return songs;
     }
 }

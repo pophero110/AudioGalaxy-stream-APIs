@@ -2,6 +2,8 @@ package com.audiogalaxy.audiogalaxy.model;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="songs")
@@ -17,9 +19,8 @@ public class Song {
     @Column
     private String title;
 
-    @ManyToOne
-    @JoinColumn(name = "playlist_id")
-    private Playlist playlist;
+    @ManyToMany(mappedBy = "songs")
+    private List<Playlist> playlists = new ArrayList<>();
 
     public Song() {
     }
@@ -41,6 +42,14 @@ public class Song {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAlbum_name() {
+        return album_name;
     }
 
     @Override
