@@ -24,7 +24,7 @@ public class Playlist {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
-
+  
     // avoid JAP session expiration by fetching eagerly
     // com.audiogalaxy.audiogalaxy.service.PlaylistService.addSongToPlaylist:104
     @ManyToMany(fetch = FetchType.EAGER)
@@ -34,6 +34,7 @@ public class Playlist {
             inverseJoinColumns = @JoinColumn(name = "song_id")
     )
     private List<Song> songs = new ArrayList<>();
+
 
     public Playlist() {
 
@@ -76,7 +77,14 @@ public class Playlist {
         return user;
     }
 
+
     public List<Song> getSongs() {
         return songs;
+
     }
+
+    public void addSong(Song song) {
+        songs.add(song);
+    }
+
 }
