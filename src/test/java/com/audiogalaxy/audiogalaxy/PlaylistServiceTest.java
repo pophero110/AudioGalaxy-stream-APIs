@@ -148,12 +148,12 @@ public class PlaylistServiceTest {
     public void testAddSongToPlaylistSuccessfully() {
         User currentlyLoggedInUser = new User("tim", "tim@gmail.com", "123456");
         Playlist playlist = new Playlist(1L,"favorite songs", "description");
-        currentlyLoggedInUser.getPlaylists().add(playlist);
         Song addedSong = new Song(1L,"album", "Champion");
 
         when(userContext.getCurrentLoggedInUser()).thenReturn(currentlyLoggedInUser);
-        when(playlistRepository.save(Mockito.any(Playlist.class))).thenReturn(playlist);
+        when(playlistRepository.findByIdAndUser(anyLong(), Mockito.any(User.class))).thenReturn(Optional.of(playlist));
         when(songRepository.findById(anyLong())).thenReturn(Optional.of(addedSong));
+        when(playlistRepository.save(Mockito.any(Playlist.class))).thenReturn(playlist);
 
         Playlist songsList = playlistService.addSongToPlaylist(playlist.getId(), addedSong);
 
@@ -180,10 +180,10 @@ public class PlaylistServiceTest {
     public void testAddSongToPlaylistUnsuccessfullyWhenSongIsNotFound() {
         User currentlyLoggedInUser = new User("tim", "tim@gmail.com", "123456");
         Playlist playlist = new Playlist(1L, "favorite songs", "description");
-        currentlyLoggedInUser.getPlaylists().add(playlist);
         Song addedSong = new Song(1L,"album", "Champion");
 
         when(userContext.getCurrentLoggedInUser()).thenReturn(currentlyLoggedInUser);
+        when(playlistRepository.findByIdAndUser(anyLong(), Mockito.any(User.class))).thenReturn(Optional.of(playlist));
 
         InformationNotFoundException exception = Assertions
                 .assertThrows(InformationNotFoundException.class, () -> playlistService.addSongToPlaylist(playlist.getId(), addedSong));

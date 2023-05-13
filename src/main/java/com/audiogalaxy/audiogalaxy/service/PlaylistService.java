@@ -4,6 +4,7 @@ import com.audiogalaxy.audiogalaxy.exception.InformationInvalidException;
 import com.audiogalaxy.audiogalaxy.exception.InformationNotFoundException;
 import com.audiogalaxy.audiogalaxy.model.Playlist;
 import com.audiogalaxy.audiogalaxy.model.Song;
+import com.audiogalaxy.audiogalaxy.model.User;
 import com.audiogalaxy.audiogalaxy.repository.PlaylistRepository;
 import com.audiogalaxy.audiogalaxy.repository.SongRepository;
 import com.audiogalaxy.audiogalaxy.security.UserContext;
@@ -92,15 +93,17 @@ public class PlaylistService {
      */
     public Playlist addSongToPlaylist(Long playlistId, Song song) {
         // check if the user has the playlist
-        Playlist foundPlaylist = userContext.getCurrentLoggedInUser()
-                .getPlaylists().stream().filter(playlist -> playlist.getId() == playlistId)
-                .findFirst()
+        User currentUser = userContext.getCurrentLoggedInUser();
+        Playlist foundPlaylist = playlistRepository.findByIdAndUser(playlistId, currentUser)
                 .orElseThrow(() -> new InformationNotFoundException("Playlist with id " + playlistId + " is not found"));
-        // check if the song is existed
+
+        // check if the song exists
         Song foundSong = songRepository.findById(song.getId())
                 .orElseThrow(() -> new InformationNotFoundException("Song with id " + song.getId() + " is not found"));
+
         foundPlaylist.getSongs().add(foundSong);
         return playlistRepository.save(foundPlaylist);
     }
+
 }
 
