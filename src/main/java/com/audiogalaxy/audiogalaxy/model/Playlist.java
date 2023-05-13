@@ -1,5 +1,8 @@
 package com.audiogalaxy.audiogalaxy.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +31,7 @@ public class Playlist {
             joinColumns = @JoinColumn(name = "playlist_id"),
             inverseJoinColumns = @JoinColumn(name = "song_id")
     )
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Song> songs = new ArrayList<>();
 
     public Playlist() {
