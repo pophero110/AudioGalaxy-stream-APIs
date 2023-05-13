@@ -1,5 +1,7 @@
 package com.audiogalaxy.audiogalaxy.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +22,12 @@ public class Playlist {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
-    @ManyToMany
+    // avoid JAP session expiration by fetching eagerly
+    // com.audiogalaxy.audiogalaxy.service.PlaylistService.addSongToPlaylist:104
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "playlist_song",
             joinColumns = @JoinColumn(name = "playlist_id"),
@@ -43,6 +48,12 @@ public class Playlist {
         this.name = name;
         this.description = description;
         this.user = user;
+    }
+
+    public Playlist(Long id, String name, String description) {
+        this.name = name;
+        this.description = description;
+        this.id = id;
     }
 
     public String getName() {

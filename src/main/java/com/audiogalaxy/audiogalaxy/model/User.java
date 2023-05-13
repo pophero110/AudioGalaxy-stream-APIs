@@ -1,8 +1,11 @@
 package com.audiogalaxy.audiogalaxy.model;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,7 +31,7 @@ public class User {
     private Boolean isActive = true;
 
     @OneToMany(mappedBy = "user")
-    private List<Playlist> playlists;
+    private List<Playlist> playlists = new ArrayList<>();
 
     public User() {
     }
@@ -67,6 +70,10 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<Playlist> getPlaylists() {
+        return playlists;
     }
 
     public void setName(String name) {
