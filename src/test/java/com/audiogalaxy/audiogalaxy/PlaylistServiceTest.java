@@ -159,4 +159,19 @@ public class PlaylistServiceTest {
 
         Assertions.assertEquals(1, songsList.getSongs().size());
     }
+
+    @Test
+    @DisplayName("add a song to a playlist unsuccessfully when playlist is not found")
+    public void testAddSongToPlaylistUnsuccessfullyWhenPlaylistIsNotFound() {
+        User currentlyLoggedInUser = new User("tim", "tim@gmail.com", "123456");
+        Playlist playlist = new Playlist(2L,"favorite songs", "description");
+        currentlyLoggedInUser.getPlaylists().add(playlist);
+        Song addedSong = new Song(1L,"album", "Champion");
+        when(userContext.getCurrentLoggedInUser()).thenReturn(currentlyLoggedInUser);
+
+        InformationNotFoundException exception = Assertions
+                .assertThrows(InformationNotFoundException.class, () -> playlistService.addSongToPlaylist(1L, addedSong));
+        String expectedMessage = "Playlist with id 1 is not found";
+        Assertions.assertTrue(exception.getMessage().contains(expectedMessage));
+    }
 }
