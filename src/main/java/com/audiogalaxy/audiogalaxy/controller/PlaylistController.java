@@ -55,4 +55,19 @@ public class PlaylistController {
     public List<Song> getSongsByPlaylist(@PathVariable Long playlistId) throws InformationNotFoundException {
         return playlistService.getSongByPlaylistId(playlistId);
     }
+
+    /**
+     * Adds a song to a playlist based on the provided playlist ID and song.
+     *
+     * Accepts a POST request with a JSON payload containing the song details. The method delegates the task of adding the
+     * song to the playlist to the playlistService's addSongToPlaylist method, passing the playlist ID and the song object.
+     *
+     * @param playlistId The ID of the playlist to which the song will be added.
+     * @param song The Song object containing the details of the song to be added.
+     * @return The updated Playlist object after adding the song.
+     */
+    @PostMapping(path = "/playlists/{playlistId}/songs/")
+    public Playlist addSongToPlaylist(@PathVariable Long playlistId,@RequestBody Song song) {
+        return playlistService.addSongToPlaylist(playlistId, song);
+    }
 }

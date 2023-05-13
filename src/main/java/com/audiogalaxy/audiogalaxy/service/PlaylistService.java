@@ -4,7 +4,9 @@ import com.audiogalaxy.audiogalaxy.exception.InformationInvalidException;
 import com.audiogalaxy.audiogalaxy.exception.InformationNotFoundException;
 import com.audiogalaxy.audiogalaxy.model.Playlist;
 import com.audiogalaxy.audiogalaxy.model.Song;
+import com.audiogalaxy.audiogalaxy.model.User;
 import com.audiogalaxy.audiogalaxy.repository.PlaylistRepository;
+import com.audiogalaxy.audiogalaxy.repository.SongRepository;
 import com.audiogalaxy.audiogalaxy.security.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,13 @@ public class PlaylistService {
     private PlaylistRepository playlistRepository;
     private UserContext userContext;
 
+    private SongRepository songRepository;
+
     @Autowired
-    private void setPlaylistRepository(PlaylistRepository playlistRepository, UserContext userContext) {
+    private void beansInjection(PlaylistRepository playlistRepository, UserContext userContext, SongRepository songRepository) {
         this.playlistRepository = playlistRepository;
         this.userContext = userContext;
+        this.songRepository = songRepository;
     }
 
     /**
@@ -73,5 +78,32 @@ public class PlaylistService {
             throw new InformationNotFoundException("Playlist with id " + playlistId + " is not found");
         }
     }
+
+    /**
+     * Adds a song to a playlist based on the provided playlist ID and song.
+     *
+     * Checks if the currently logged-in user has the playlist with the given ID. If the playlist is found, it checks if the
+     * song with the provided ID exists. If both the playlist and song are found, the song is added to the playlist, and the
+     * updated playlist is saved.
+     *
+     * @param playlistId The ID of the playlist to which the song will be added.
+     * @param song The song to be added to the playlist.
+     * @return The updated playlist after adding the song.
+     * @throws InformationNotFoundException if the playlist with the given ID or the song with the given ID is not found.
+     */
+    public Playlist addSongToPlaylist(Long playlistId, Song song) {
+        // check if the user has the playlist
+        User currentUser = userContext.getCurrentLoggedInUser();
+        Playlist foundPlaylist = playlistRepository.findByIdAndUser(playlistId, currentUser)
+                .orElseThrow(() -> new InformationNotFoundException("Playlist with id " + playlistId + " is not found"));
+
+        // check if the song exists
+        Song foundSong = songRepository.findById(song.getId())
+                .orElseThrow(() -> new InformationNotFoundException("Song with id " + song.getId() + " is not found"));
+
+        foundPlaylist.getSongs().add(foundSong);
+        return playlistRepository.save(foundPlaylist);
+    }
+
 }
 

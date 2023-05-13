@@ -12,6 +12,7 @@ import com.audiogalaxy.audiogalaxy.service.PlaylistService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -138,6 +139,60 @@ public class PlaylistControllerTest {
         when(playlistService.getSongByPlaylistId(anyLong())).thenThrow(new InformationNotFoundException("Playlist with id 1 is not found"));
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/api/playlists/1/");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("add a song to a playlist successfully and return the playlist")
+    public void shouldAddSongToPlaylistSuccessfully() throws Exception {
+        Playlist playlist = new Playlist(1L, "favorite music", "description");
+        Song song = new Song(1L, "album", "Champion");
+        playlist.getSongs().add(song);
+        when(playlistService.addSongToPlaylist(anyLong(), Mockito.any(Song.class))).thenReturn(playlist);
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/playlists/1/songs/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(song));
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.name").value(playlist.getName()))
+                .andExpect(jsonPath("$.songs", notNullValue()))
+                .andExpect(jsonPath("$.songs.length()").value(1))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("add a song to a playlist unsuccessfully when playlist is not found")
+    public void shouldAddSongToPlaylistUnsuccessfullyWhenPlaylistIsNotFound () throws Exception {
+        Song song = new Song(1L, "album", "Champion");
+        when(playlistService.addSongToPlaylist(anyLong(), Mockito.any(Song.class))).thenThrow(new InformationNotFoundException("Playlist with id 1L is not found"));
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/playlists/1/songs/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(song));
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("add a song to a playlist unsuccessfully when song is not found")
+    public void shouldAddSongToPlaylistUnsuccessfullyWhenSongIsNotFound() throws Exception {
+        Song song = new Song(1L, "album", "Champion");
+        when(playlistService.addSongToPlaylist(anyLong(), Mockito.any(Song.class))).thenThrow(new InformationNotFoundException("Song with id 1L is not found"));
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/playlists/1/songs/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(song));
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isNotFound())
