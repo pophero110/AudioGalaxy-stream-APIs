@@ -30,7 +30,7 @@ public class User {
     @Column
     private Boolean isActive = true;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user")
     private List<Playlist> playlists = new ArrayList<>();
 
     public User() {

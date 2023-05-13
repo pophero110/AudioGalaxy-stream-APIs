@@ -25,6 +25,8 @@ public class Playlist {
     @JsonIgnore
     private User user;
 
+    // avoid JAP session expiration by fetching eagerly
+    // com.audiogalaxy.audiogalaxy.service.PlaylistService.addSongToPlaylist:104
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "playlist_song",
