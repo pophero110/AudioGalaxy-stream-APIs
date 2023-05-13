@@ -49,6 +49,13 @@ public class Playlist {
         this.user = user;
     }
 
+    public Playlist(Long id, String name, String description, User user) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.user = user;
+    }
+
     public String getName() {
         return name;
     }

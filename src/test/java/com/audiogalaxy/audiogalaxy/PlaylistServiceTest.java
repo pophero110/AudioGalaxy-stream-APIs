@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
 
 
@@ -141,12 +142,15 @@ public class PlaylistServiceTest {
         User currentlyLoggedInUser = new User("jeff", "jeff@gmail.com", "password");
         when(userContext.getCurrentLoggedInUser()).thenReturn(currentlyLoggedInUser);
 
-        Playlist playlist = new Playlist("jazz music", "jazzy description");
-        playlist.getSongs().add(new Song("Jazz For The Quiet Times", "Smooth Jazz"));
+        Playlist playlist = new Playlist(1L, "jazz music", "jazzy description", currentlyLoggedInUser);
 
-        when(playlistRepository.findByIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.of(playlist));
+        when(playlistRepository.findByIdAndUserId(playlist.getId(), currentlyLoggedInUser.getId())).thenReturn(Optional.of(playlist));
 
-        Assertions.assertThrows(Exception.class, () -> playlistService.deletePlaylistId(playlist.getId()));
+        Playlist actualPlaylist = playlistService.deletePlaylistId(playlist.getId());
+
+        willDoNothing().given(playlistRepository).deleteById(playlist.getId());
+
+        verify(playlistRepository, times(0)).findById(playlist.getId());
     }
 
     @Test
@@ -156,7 +160,6 @@ public class PlaylistServiceTest {
         when(userContext.getCurrentLoggedInUser()).thenReturn(currentlyLoggedInUser);
 
         Playlist playlist = new Playlist("jazz music", "jazzy description");
-        playlist.getSongs().add(new Song("Jazz For The Quiet Times", "Smooth Jazz"));
 
         when(playlistRepository.findByIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.of(playlist));
 
