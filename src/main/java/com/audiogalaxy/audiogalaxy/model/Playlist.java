@@ -23,13 +23,8 @@ public class Playlist {
     private User user;
 
     @ManyToMany
-    @JoinTable(
-            name = "playlist_song",
-            joinColumns = @JoinColumn(name = "playlist_id"),
-            inverseJoinColumns = @JoinColumn(name = "song_id")
-    )
+    @JoinTable(name = "playlist_song", joinColumns = @JoinColumn(name = "playlist_id"), inverseJoinColumns = @JoinColumn(name = "song_id"))
     private List<Song> songs = new ArrayList<>();
-
 
 
     public Playlist() {
@@ -71,9 +66,9 @@ public class Playlist {
     public List<Song> getSongs() {
         return songs;
 
-            }
+    }
 
-    public void addSong (Song song){
+    public void addSong(Song song) {
         if (songs == null) {
             songs = new ArrayList<>();
         }

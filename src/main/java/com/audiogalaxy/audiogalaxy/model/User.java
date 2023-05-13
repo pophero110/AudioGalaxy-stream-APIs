@@ -1,6 +1,7 @@
 package com.audiogalaxy.audiogalaxy.model;
 
 import javax.persistence.*;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
