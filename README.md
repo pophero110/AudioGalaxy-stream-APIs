@@ -37,6 +37,9 @@ Users can interact with the app to conduct CRUD action by creating an account, a
 ### Progress Snapshot 3
 ![Kanban Board 3](./img/kanban3.png)<br><br>
 
+### Progress Snapshot 4
+![Kanban Board 4](./img/kanban4.png)<br><br>
+
 
 [View Planning Kanban Board](https://github.com/users/pophero110/projects/7)
 
