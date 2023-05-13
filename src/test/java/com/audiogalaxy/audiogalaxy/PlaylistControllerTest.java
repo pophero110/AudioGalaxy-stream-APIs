@@ -166,4 +166,20 @@ public class PlaylistControllerTest {
                 .andExpect(jsonPath("$.songs.length()").value(1))
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("add a song to a playlist unsuccessfully when playlist is not found")
+    public void shouldAddSongToPlaylistUnsuccessfullyWhenPlaylistIsNotFound () throws Exception {
+        Song song = new Song(1L, "album", "Champion");
+        when(playlistService.addSongToPlaylist(anyLong(), Mockito.any(Song.class))).thenThrow(new InformationNotFoundException("Playlist with id 1L is not found"));
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/playlists/1/songs/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(song));
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
 }
