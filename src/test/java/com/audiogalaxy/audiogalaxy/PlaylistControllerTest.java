@@ -12,6 +12,7 @@ import com.audiogalaxy.audiogalaxy.service.PlaylistService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -141,6 +142,28 @@ public class PlaylistControllerTest {
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("add a song to a playlist successfully and return the playlist")
+    public void shouldAddSongToPlaylistSuccessfully() throws Exception {
+        Playlist playlist = new Playlist(1L, "favorite music", "description");
+        Song song = new Song(1L, "album", "Champion");
+        playlist.getSongs().add(song);
+        when(playlistService.addSongToPlaylist(anyLong(), Mockito.any(Song.class))).thenReturn(playlist);
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/playlists/1/songs/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(song));
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.name").value(playlist.getName()))
+                .andExpect(jsonPath("$.songs", notNullValue()))
+                .andExpect(jsonPath("$.songs.length()").value(1))
                 .andDo(print());
     }
 }
