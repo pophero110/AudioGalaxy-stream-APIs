@@ -1,5 +1,6 @@
 package com.audiogalaxy.audiogalaxy;
 
+import com.audiogalaxy.audiogalaxy.exception.InformationInvalidException;
 import com.audiogalaxy.audiogalaxy.exception.InformationNotFoundException;
 import com.audiogalaxy.audiogalaxy.model.User;
 import com.audiogalaxy.audiogalaxy.model.request.LoginRequest;
@@ -57,9 +58,7 @@ public class UserServiceTest {
         LoginRequest loginRequest = new LoginRequest("tim@hotmail.com", "tim123");
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(inActiveUser));
 
-        Assertions.assertThrows(InformationNotFoundException.class, () -> {
-            userService.loginUser(loginRequest);
-        });
+        Assertions.assertThrows(InformationNotFoundException.class, () -> userService.loginUser(loginRequest));
     }
 
     @Test
@@ -69,7 +68,7 @@ public class UserServiceTest {
         activeUser.setActive(true);
         when(userContext.getCurrentLoggedInUser()).thenReturn(activeUser);
 
-        ResponseEntity response = userService.setUserToInactive();
+        ResponseEntity<?> response = userService.setUserToInactive();
         Assertions.assertEquals(200, response.getStatusCodeValue());
         Assertions.assertFalse(activeUser.getActive());
     }
@@ -83,4 +82,30 @@ public class UserServiceTest {
 
         Assertions.assertThrows(InformationNotFoundException.class, () -> userService.setUserToInactive());
     }
+
+    @Test
+    @DisplayName("check if user is not blank")
+    public void updateUserNameNotBlank() {
+        User currentLoggedUser = new User("tim", "tim@hotmail.com", "tim123");
+        when(userContext.getCurrentLoggedInUser()).thenReturn(currentLoggedUser);
+        User userObject = new User();
+        userObject.setName("mark");
+        when(userRepository.save(Mockito.any(User.class))).thenReturn(currentLoggedUser);
+        User returnUser = userService.updateUsername(userObject);
+
+        Assertions.assertEquals("mark", returnUser.getName());
+    }
+
+    @Test
+    @DisplayName("check if user is a valid username")
+    public void updateUserNameIsValid() {
+        User currentLoggedUser = new User("tim", "tim@hotmail.com", "tim123");
+        when(userContext.getCurrentLoggedInUser()).thenReturn(currentLoggedUser);
+        User userObject = new User();
+        userObject.setName("");
+        when(userRepository.save(Mockito.any(User.class))).thenReturn(currentLoggedUser);
+
+        Assertions.assertThrows(InformationInvalidException.class, () -> userService.updateUsername(userObject));
+    }
+
 }

@@ -75,4 +75,8 @@ public class User {
     public List<Playlist> getPlaylists() {
         return playlists;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
