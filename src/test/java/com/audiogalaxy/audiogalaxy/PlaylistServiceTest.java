@@ -6,6 +6,7 @@ import com.audiogalaxy.audiogalaxy.model.Playlist;
 import com.audiogalaxy.audiogalaxy.model.Song;
 import com.audiogalaxy.audiogalaxy.model.User;
 import com.audiogalaxy.audiogalaxy.repository.PlaylistRepository;
+import com.audiogalaxy.audiogalaxy.repository.SongRepository;
 import com.audiogalaxy.audiogalaxy.security.MyUserDetails;
 import com.audiogalaxy.audiogalaxy.security.MyUserDetailsService;
 import com.audiogalaxy.audiogalaxy.security.UserContext;
@@ -35,6 +36,9 @@ public class PlaylistServiceTest {
 
     @MockBean
     PlaylistRepository playlistRepository;
+
+    @MockBean
+    SongRepository songRepository;
 
     @MockBean
     UserContext userContext;
@@ -137,5 +141,22 @@ public class PlaylistServiceTest {
         when(playlistRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         Assertions.assertThrows(InformationNotFoundException.class, () -> playlistService.getSongByPlaylistId(2l));
+    }
+
+    @Test
+    @DisplayName("add a song to a playlist successfully")
+    public void testAddSongToPlaylistSuccessfully() {
+        User currentlyLoggedInUser = new User("tim", "tim@gmail.com", "123456");
+        Playlist playlist = new Playlist(1L,"favorite songs", "description");
+        currentlyLoggedInUser.getPlaylists().add(playlist);
+        Song addedSong = new Song(1L,"album", "Champion");
+
+        when(userContext.getCurrentLoggedInUser()).thenReturn(currentlyLoggedInUser);
+        when(playlistRepository.save(Mockito.any(Playlist.class))).thenReturn(playlist);
+        when(songRepository.findById(anyLong())).thenReturn(Optional.of(addedSong));
+
+        Playlist songsList = playlistService.addSongToPlaylist(playlist.getId(), addedSong);
+
+        Assertions.assertEquals(1, songsList.getSongs().size());
     }
 }
