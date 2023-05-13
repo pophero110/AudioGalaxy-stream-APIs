@@ -142,4 +142,32 @@ public class PlaylistServiceTest {
         Assertions.assertThrows(InformationNotFoundException.class, () -> playlistService.getSongByPlaylistId(2l));
     }
 
+    @Test
+    @DisplayName("return playlist that was deleted as informational")
+    public void testDeletePlaylistSuccessfully() {
+        User currentlyLoggedInUser = new User("jeff", "jeff@gmail.com", "password");
+        when(userContext.getCurrentLoggedInUser()).thenReturn(currentlyLoggedInUser);
+
+        Playlist playlist = new Playlist("jazz music", "jazzy description");
+        playlist.getSongs().add(new Song("Jazz For The Quiet Times", "Smooth Jazz"));
+
+        when(playlistRepository.findByIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.of(playlist));
+
+        Assertions.assertThrows(Exception.class, () -> playlistService.deletePlaylistId(playlist.getId()));
+    }
+
+    @Test
+    @DisplayName("return playlist that was deleted as informational")
+    public void testDeletePlaylistUnsuccessfully() {
+        User currentlyLoggedInUser = new User("jeff", "jeff@gmail.com", "password");
+        when(userContext.getCurrentLoggedInUser()).thenReturn(currentlyLoggedInUser);
+
+        Playlist playlist = new Playlist("jazz music", "jazzy description");
+        playlist.getSongs().add(new Song("Jazz For The Quiet Times", "Smooth Jazz"));
+
+        when(playlistRepository.findByIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.of(playlist));
+
+        Assertions.assertThrows(InformationNotFoundException.class, () -> playlistService.deletePlaylistId(playlist.getId()));
+    }
+
 }
