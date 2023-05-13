@@ -73,5 +73,20 @@ public class PlaylistService {
             throw new InformationNotFoundException("Playlist with id " + playlistId + " is not found");
         }
     }
+
+    /**
+     * Method deletes specified playlist for current logged-in user.
+     * @param playlistId
+     * @return
+     */
+    public Playlist deletePlaylistId(Long playlistId) {
+        Optional<Playlist> playlist = playlistRepository.findByIdAndUserId(playlistId, userContext.getCurrentLoggedInUser().getId());
+        if (playlist.isPresent()) {
+            playlistRepository.deleteById(playlistId);
+            return playlist.get();
+        } else {
+            throw new InformationNotFoundException("User's Playlist with id " + playlistId + " is not found");
+        }
+    }
 }
 

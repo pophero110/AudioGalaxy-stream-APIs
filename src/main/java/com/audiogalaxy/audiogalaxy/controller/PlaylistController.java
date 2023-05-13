@@ -55,4 +55,15 @@ public class PlaylistController {
     public List<Song> getSongsByPlaylist(@PathVariable Long playlistId) throws InformationNotFoundException {
         return playlistService.getSongByPlaylistId(playlistId);
     }
+
+    /**
+     * Calls method to delete specific playlist of currently logged-in user
+     * @param playlistId Id of playlist wanting to delete.
+     * @return Deleted playlist
+     * @throws InformationNotFoundException If an error occurs.
+     */
+    @DeleteMapping(path = "/playlists/{playlistId}/")
+    public Playlist deletePlaylist(@PathVariable Long playlistId) throws InformationNotFoundException {
+        return playlistService.deletePlaylistId(playlistId);
+    }
 }

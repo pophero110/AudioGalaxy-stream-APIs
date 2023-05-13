@@ -143,4 +143,28 @@ public class PlaylistControllerTest {
                 .andExpect(status().isNotFound())
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("return 200 and playlist that was deleted")
+    public void shouldDeletePlaylistSuccessfully() throws Exception {
+        when(playlistService.deletePlaylistId(anyLong())).thenReturn((playlist));
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.delete("/api/playlists/{playlistId}/", 1);
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("return 404 if playlist is not found")
+    public void shouldDeletePlaylistUnsuccessfully() throws Exception {
+        when(playlistService.deletePlaylistId(anyLong())).thenThrow(new InformationNotFoundException("Playlist with id 1 is not found"));
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.delete("/api/playlists/{playlistId}/", 1);
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
 }
