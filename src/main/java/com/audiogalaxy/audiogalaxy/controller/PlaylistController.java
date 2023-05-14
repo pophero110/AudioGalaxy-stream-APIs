@@ -56,7 +56,6 @@ public class PlaylistController {
     }
 
     /**
-     * <<<<<<< HEAD
      * Calls method to delete specific playlist of currently logged-in user
      *
      * @param playlistId The id of playlist wanting to delete.
