@@ -176,8 +176,8 @@ public class PlaylistServiceTest {
     public void testAddSongToPlaylistSuccessfully() {
         User currentlyLoggedInUser = new User("tim", "tim@gmail.com", "123456");
         currentlyLoggedInUser.setId(1L);
-        Playlist playlist = new Playlist(1L,"favorite songs", "description");
-        Song addedSong = new Song(1L,"album", "Champion");
+        Playlist playlist = new Playlist(1L, "favorite songs", "description");
+        Song addedSong = new Song(1L, "album", "Champion");
 
         when(userContext.getCurrentLoggedInUser()).thenReturn(currentlyLoggedInUser);
         when(playlistRepository.findByIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.of(playlist));
@@ -194,9 +194,9 @@ public class PlaylistServiceTest {
     public void testAddSongToPlaylistUnsuccessfullyWhenPlaylistIsNotFound() {
         User currentlyLoggedInUser = new User("tim", "tim@gmail.com", "123456");
         currentlyLoggedInUser.setId(1L);
-        Playlist playlist = new Playlist(2L,"favorite songs", "description");
+        Playlist playlist = new Playlist(2L, "favorite songs", "description");
         currentlyLoggedInUser.getPlaylists().add(playlist);
-        Song addedSong = new Song(1L,"album", "Champion");
+        Song addedSong = new Song(1L, "album", "Champion");
         when(userContext.getCurrentLoggedInUser()).thenReturn(currentlyLoggedInUser);
 
         InformationNotFoundException exception = Assertions
@@ -211,7 +211,7 @@ public class PlaylistServiceTest {
         User currentlyLoggedInUser = new User("tim", "tim@gmail.com", "123456");
         currentlyLoggedInUser.setId(1L);
         Playlist playlist = new Playlist(1L, "favorite songs", "description");
-        Song addedSong = new Song(1L,"album", "Champion");
+        Song addedSong = new Song(1L, "album", "Champion");
 
         when(userContext.getCurrentLoggedInUser()).thenReturn(currentlyLoggedInUser);
         when(playlistRepository.findByIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.of(playlist));
@@ -219,6 +219,56 @@ public class PlaylistServiceTest {
         InformationNotFoundException exception = Assertions
                 .assertThrows(InformationNotFoundException.class, () -> playlistService.addSongToPlaylist(playlist.getId(), addedSong));
         String expectedMessage = "Song with id " + addedSong.getId() + " is not found";
+        Assertions.assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("update the name of a playlist successfully")
+    public void testUpdatePlaylistSuccessfully() {
+        User currentlyLoggedInUser = new User("tim", "tim@gmail.com", "123456");
+        currentlyLoggedInUser.setId(1L);
+        Playlist playlist = new Playlist(1L, "favorite songs", "description");
+
+        when(userContext.getCurrentLoggedInUser()).thenReturn(currentlyLoggedInUser);
+        when(playlistRepository.findByIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.of(playlist));
+        when(playlistRepository.save(Mockito.any(Playlist.class))).thenReturn(playlist);
+
+        Playlist playlistObject = new Playlist("chill song", "none");
+        Playlist updatedPlaylist = playlistService.updatePlaylist(1L, playlistObject);
+        Assertions.assertEquals(updatedPlaylist.getName(), playlistObject.getName());
+        Assertions.assertEquals(updatedPlaylist.getDescription(), playlistObject.getDescription());
+    }
+
+    @Test
+    @DisplayName("update the name of a playlist with blank value throw an exception")
+    public void testUpdatePlaylistUnsuccessfully() {
+        User currentlyLoggedInUser = new User("tim", "tim@gmail.com", "123456");
+        currentlyLoggedInUser.setId(1L);
+        Playlist playlist = new Playlist(1L, "favorite songs", "description");
+
+        when(userContext.getCurrentLoggedInUser()).thenReturn(currentlyLoggedInUser);
+        when(playlistRepository.findByIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.of(playlist));
+
+        Playlist playlistObject = new Playlist("", "none");
+        InformationInvalidException exception = Assertions
+                .assertThrows(InformationInvalidException.class, () -> playlistService.updatePlaylist(1L, playlistObject));
+        String expectedMessage = "The name of the playlist cannot be empty or contain only spaces";
+        Assertions.assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("update the name of a playlist but playlist is not found")
+    public void testUpdatePlaylistUnsuccessfullyWhenPlaylistIsNotFound() {
+        User currentlyLoggedInUser = new User("tim", "tim@gmail.com", "123456");
+        currentlyLoggedInUser.setId(1L);
+
+        when(userContext.getCurrentLoggedInUser()).thenReturn(currentlyLoggedInUser);
+        when(playlistRepository.findByIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.empty());
+
+        Playlist playlistObject = new Playlist("", "none");
+        InformationNotFoundException exception = Assertions
+                .assertThrows(InformationNotFoundException.class, () -> playlistService.updatePlaylist(1L, playlistObject));
+        String expectedMessage = "Playlist with id 1 is not found";
         Assertions.assertEquals(expectedMessage, exception.getMessage());
     }
 }

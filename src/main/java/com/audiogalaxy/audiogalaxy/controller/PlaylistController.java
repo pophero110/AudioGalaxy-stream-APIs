@@ -74,11 +74,26 @@ public class PlaylistController {
      * song to the playlist to the playlistService's addSongToPlaylist method, passing the playlist ID and the song object.
      *
      * @param playlistId The ID of the playlist to which the song will be added.
-     * @param song The Song object containing the details of the song to be added.
+     * @param song       The Song object containing the details of the song to be added.
      * @return The updated Playlist object after adding the song.
      */
     @PostMapping(path = "/playlists/{playlistId}/songs/")
     public Playlist addSongToPlaylist(@PathVariable Long playlistId, @RequestBody Song song) {
         return playlistService.addSongToPlaylist(playlistId, song);
+    }
+
+    /**
+     * Updates the playlist with the specified ID using the data from the provided playlist object.
+     * <p>
+     * Accepts a PUT request with a JSON payload containing the updated playlist data. The method delegates the task of
+     * updating the playlist to the playlistService's updatePlaylist method, passing the playlist ID and the playlist object.
+     *
+     * @param playlistId The ID of the playlist to be updated.
+     * @param playlist   The playlist object containing the updated data.
+     * @return The updated playlist.
+     */
+    @PutMapping(path = "/playlists/{playlistId}/")
+    public Playlist updatePlaylist(@PathVariable Long playlistId, @RequestBody Playlist playlist) {
+        return playlistService.updatePlaylist(playlistId, playlist);
     }
 }
