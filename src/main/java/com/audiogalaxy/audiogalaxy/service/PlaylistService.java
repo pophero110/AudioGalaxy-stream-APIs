@@ -37,7 +37,7 @@ public class PlaylistService {
      */
     public Playlist createPlayList(Playlist playlist) {
         if (playlist.getName() == null || playlist.getName().isBlank()) {
-            throw new InformationInvalidException("The name of playlist can not empty or contains only space");
+            throw new InformationInvalidException("The name of the playlist cannot be empty or contain only spaces");
         }
         playlist.setUser(userContext.getCurrentLoggedInUser());
         // saving the playlist to database
@@ -124,5 +124,37 @@ public class PlaylistService {
         foundPlaylist.getSongs().add(foundSong);
         return playlistRepository.save(foundPlaylist);
     }
+
+    /**
+     * Updates the playlist with the specified ID using the data from the provided playlist object.
+     *
+     * Checks if the currently logged-in user has a playlist with the given ID. If the playlist is found, the name and
+     * description of the playlist are updated based on the corresponding fields in the playlist object. The updated playlist
+     * is then saved and returned.
+     *
+     * @param playlistId The ID of the playlist to be updated.
+     * @param playlistObject The playlist object containing the updated data.
+     * @return The updated playlist.
+     * @throws InformationNotFoundException If the playlist with the given ID is not found.
+     * @throws InformationInvalidException If the name of the playlist is empty or contains only spaces.
+     */
+    public Playlist updatePlaylist(Long playlistId, Playlist playlistObject) {
+        User currentUser = userContext.getCurrentLoggedInUser();
+        Playlist foundPlaylist = playlistRepository.findByIdAndUserId(playlistId, currentUser.getId())
+                .orElseThrow(() -> new InformationNotFoundException("Playlist with id " + playlistId + " is not found"));
+
+        if (playlistObject.getName() == null || playlistObject.getName().isBlank()) {
+            throw new InformationInvalidException("The name of the playlist cannot be empty or contain only spaces");
+        } else {
+            foundPlaylist.setName(playlistObject.getName());
+        }
+
+        if (playlistObject.getDescription() != null && !playlistObject.getDescription().isBlank()) {
+            foundPlaylist.setDescription(playlistObject.getDescription());
+        }
+
+        return playlistRepository.save(foundPlaylist);
+    }
+
 }
 
