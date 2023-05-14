@@ -1,10 +1,14 @@
 package com.audiogalaxy.audiogalaxy.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name="songs")
+@Table(name = "songs")
 public class Song {
     @Id
     @Column
@@ -16,6 +20,10 @@ public class Song {
 
     @Column
     private String title;
+
+    @ManyToMany(mappedBy = "songs")
+    @JsonIgnore
+    private List<Playlist> playlists = new ArrayList<>();
 
     public Song() {
     }
@@ -37,6 +45,14 @@ public class Song {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAlbum_name() {
+        return album_name;
     }
 
     @Override

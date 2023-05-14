@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
  */
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class TestSecurityConfiguratoin {
+public class TestSecurityConfiguration {
 
     @Bean
     public SecurityFilterChain testFilterChain(HttpSecurity http) throws Exception {

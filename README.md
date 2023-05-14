@@ -91,10 +91,10 @@ songs from their created playlist.
 8. Have graceful exception handling in place. - ✓
 9. In the event that an exception occurs, you should send error message to user. - ✓
 10. Code on different branches during development. - ✓
-11. Utilize KISS & DRY Principals. - ✗
+11. Utilize KISS & DRY Principals. - ✓
 12. Write code that is test driven with TDD Approach. - ✓
 13. Unit test the controller & service classes with MockMVC. - ✓
-14. Write Doc Strings for each method. - ✗
+14. Write Doc Strings for each method. - ✓
 15. Provide REST Endpoints. - ✓
 
 ***

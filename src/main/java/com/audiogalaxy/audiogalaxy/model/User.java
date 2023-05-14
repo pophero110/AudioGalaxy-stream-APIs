@@ -1,8 +1,9 @@
 package com.audiogalaxy.audiogalaxy.model;
 
 import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,8 +25,11 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @Column
+    private Boolean isActive = true;
+
     @OneToMany(mappedBy = "user")
-    private List<Playlist> playlists;
+    private List<Playlist> playlists = new ArrayList<>();
 
     public User() {
     }
@@ -53,5 +57,35 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setPlaylists(List<Playlist> playlists) {
+        this.playlists = playlists;
+    }
+
+    @JsonIgnore
+    public List<Playlist> getPlaylists() {
+        return playlists;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
