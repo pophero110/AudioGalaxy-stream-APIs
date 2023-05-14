@@ -32,7 +32,7 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private MyUserDetails myUserDetails;
 
-    private UserContext userContext;
+    private final UserContext userContext;
 
     @Autowired
     public UserService(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder,

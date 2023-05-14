@@ -36,7 +36,7 @@ public class Playlist {
             inverseJoinColumns = @JoinColumn(name = "song_id")
     )
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Song> songs = new ArrayList<>();
+    private final List<Song> songs = new ArrayList<>();
 
 
     public Playlist() {

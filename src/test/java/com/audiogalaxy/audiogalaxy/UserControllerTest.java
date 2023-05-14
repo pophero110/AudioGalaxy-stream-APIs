@@ -230,7 +230,7 @@ public class UserControllerTest {
         MockHttpServletRequestBuilder mockRequest = put(endpoint + "profile/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(loggedInUser));;
+                .content(mapper.writeValueAsString(loggedInUser));
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())

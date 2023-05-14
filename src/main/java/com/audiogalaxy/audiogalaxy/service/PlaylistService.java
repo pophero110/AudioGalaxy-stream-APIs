@@ -16,10 +16,10 @@ import java.util.Optional;
 
 @Service
 public class PlaylistService {
-    private PlaylistRepository playlistRepository;
-    private UserContext userContext;
+    private final PlaylistRepository playlistRepository;
+    private final UserContext userContext;
 
-    private SongRepository songRepository;
+    private final SongRepository songRepository;
 
     @Autowired
     public PlaylistService(PlaylistRepository playlistRepository, UserContext userContext, SongRepository songRepository) {
