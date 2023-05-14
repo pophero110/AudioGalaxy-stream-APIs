@@ -37,7 +37,6 @@ public class PlaylistController {
      * Return a list of playlists that belong to currently authenticated user
      *
      * @return a list of playlists
-     * @return 400 if the user does not have any playlist
      */
     @GetMapping(path = "/playlists/")
     public List<Playlist> getPlaylists() {
@@ -57,8 +56,20 @@ public class PlaylistController {
     }
 
     /**
-     * Adds a song to a playlist based on the provided playlist ID and song.
+     * Calls method to delete specific playlist of currently logged-in user
      *
+     * @param playlistId The id of playlist wanting to delete.
+     * @return Deleted playlist
+     * @throws InformationNotFoundException If an error occurs.
+     */
+    @DeleteMapping(path = "/playlists/{playlistId}/")
+    public Playlist deletePlaylist(@PathVariable Long playlistId) throws InformationNotFoundException {
+        return playlistService.deletePlaylistId(playlistId);
+    }
+
+    /**
+     * Adds a song to a playlist based on the provided playlist ID and song.
+     * <p>
      * Accepts a POST request with a JSON payload containing the song details. The method delegates the task of adding the
      * song to the playlist to the playlistService's addSongToPlaylist method, passing the playlist ID and the song object.
      *
@@ -67,7 +78,7 @@ public class PlaylistController {
      * @return The updated Playlist object after adding the song.
      */
     @PostMapping(path = "/playlists/{playlistId}/songs/")
-    public Playlist addSongToPlaylist(@PathVariable Long playlistId,@RequestBody Song song) {
+    public Playlist addSongToPlaylist(@PathVariable Long playlistId, @RequestBody Song song) {
         return playlistService.addSongToPlaylist(playlistId, song);
     }
 }

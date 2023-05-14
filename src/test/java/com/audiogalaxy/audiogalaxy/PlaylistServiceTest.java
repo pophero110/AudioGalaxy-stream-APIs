@@ -7,17 +7,13 @@ import com.audiogalaxy.audiogalaxy.model.Song;
 import com.audiogalaxy.audiogalaxy.model.User;
 import com.audiogalaxy.audiogalaxy.repository.PlaylistRepository;
 import com.audiogalaxy.audiogalaxy.repository.SongRepository;
-import com.audiogalaxy.audiogalaxy.security.MyUserDetails;
-import com.audiogalaxy.audiogalaxy.security.MyUserDetailsService;
 import com.audiogalaxy.audiogalaxy.security.UserContext;
 import com.audiogalaxy.audiogalaxy.service.PlaylistService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
 
 
@@ -130,7 +127,7 @@ public class PlaylistServiceTest {
 
         when(playlistRepository.findById(anyLong())).thenReturn(Optional.of(playlist));
 
-        List<Song> playlistSongs = playlistService.getSongByPlaylistId(2l);
+        List<Song> playlistSongs = playlistService.getSongByPlaylistId(2L);
 
         Assertions.assertEquals(2, playlistSongs.size());
     }
@@ -140,18 +137,50 @@ public class PlaylistServiceTest {
     public void testGetSongsByPlaylistIdUnsuccessfully() {
         when(playlistRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(InformationNotFoundException.class, () -> playlistService.getSongByPlaylistId(2l));
+        Assertions.assertThrows(InformationNotFoundException.class, () -> playlistService.getSongByPlaylistId(2L));
+    }
+
+    @Test
+    @DisplayName("return playlist that was deleted as informational")
+    public void testDeletePlaylistSuccessfully() {
+        User currentlyLoggedInUser = new User("jeff", "jeff@gmail.com", "password");
+        when(userContext.getCurrentLoggedInUser()).thenReturn(currentlyLoggedInUser);
+
+        Playlist playlist = new Playlist(1L, "jazz music", "jazzy description", currentlyLoggedInUser);
+
+        when(playlistRepository.findByIdAndUserId(playlist.getId(), currentlyLoggedInUser.getId())).thenReturn(Optional.of(playlist));
+
+        Playlist actualPlaylist = playlistService.deletePlaylistId(playlist.getId());
+
+        willDoNothing().given(playlistRepository).deleteById(playlist.getId());
+
+        verify(playlistRepository, times(1)).deleteById(playlist.getId());
+        Assertions.assertNotNull(actualPlaylist);
+    }
+
+    @Test
+    @DisplayName("return playlist that was deleted as informational")
+    public void testDeletePlaylistUnsuccessfully() {
+        User currentlyLoggedInUser = new User("jeff", "jeff@gmail.com", "password");
+        when(userContext.getCurrentLoggedInUser()).thenReturn(currentlyLoggedInUser);
+
+        Playlist playlist = new Playlist("jazz music", "jazzy description");
+
+        when(playlistRepository.findByIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.of(playlist));
+
+        Assertions.assertThrows(InformationNotFoundException.class, () -> playlistService.deletePlaylistId(playlist.getId()));
     }
 
     @Test
     @DisplayName("add a song to a playlist successfully")
     public void testAddSongToPlaylistSuccessfully() {
         User currentlyLoggedInUser = new User("tim", "tim@gmail.com", "123456");
+        currentlyLoggedInUser.setId(1L);
         Playlist playlist = new Playlist(1L,"favorite songs", "description");
         Song addedSong = new Song(1L,"album", "Champion");
 
         when(userContext.getCurrentLoggedInUser()).thenReturn(currentlyLoggedInUser);
-        when(playlistRepository.findByIdAndUser(anyLong(), Mockito.any(User.class))).thenReturn(Optional.of(playlist));
+        when(playlistRepository.findByIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.of(playlist));
         when(songRepository.findById(anyLong())).thenReturn(Optional.of(addedSong));
         when(playlistRepository.save(Mockito.any(Playlist.class))).thenReturn(playlist);
 
@@ -164,6 +193,7 @@ public class PlaylistServiceTest {
     @DisplayName("add a song to a playlist unsuccessfully when playlist is not found")
     public void testAddSongToPlaylistUnsuccessfullyWhenPlaylistIsNotFound() {
         User currentlyLoggedInUser = new User("tim", "tim@gmail.com", "123456");
+        currentlyLoggedInUser.setId(1L);
         Playlist playlist = new Playlist(2L,"favorite songs", "description");
         currentlyLoggedInUser.getPlaylists().add(playlist);
         Song addedSong = new Song(1L,"album", "Champion");
@@ -172,22 +202,23 @@ public class PlaylistServiceTest {
         InformationNotFoundException exception = Assertions
                 .assertThrows(InformationNotFoundException.class, () -> playlistService.addSongToPlaylist(1L, addedSong));
         String expectedMessage = "Playlist with id 1 is not found";
-        Assertions.assertTrue(exception.getMessage().contains(expectedMessage));
+        Assertions.assertEquals(expectedMessage, exception.getMessage());
     }
 
     @Test
     @DisplayName("add a song to a playlist unsuccessfully when song is not found")
     public void testAddSongToPlaylistUnsuccessfullyWhenSongIsNotFound() {
         User currentlyLoggedInUser = new User("tim", "tim@gmail.com", "123456");
+        currentlyLoggedInUser.setId(1L);
         Playlist playlist = new Playlist(1L, "favorite songs", "description");
         Song addedSong = new Song(1L,"album", "Champion");
 
         when(userContext.getCurrentLoggedInUser()).thenReturn(currentlyLoggedInUser);
-        when(playlistRepository.findByIdAndUser(anyLong(), Mockito.any(User.class))).thenReturn(Optional.of(playlist));
+        when(playlistRepository.findByIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.of(playlist));
 
         InformationNotFoundException exception = Assertions
                 .assertThrows(InformationNotFoundException.class, () -> playlistService.addSongToPlaylist(playlist.getId(), addedSong));
         String expectedMessage = "Song with id " + addedSong.getId() + " is not found";
-        Assertions.assertTrue(exception.getMessage().contains(expectedMessage));
+        Assertions.assertEquals(expectedMessage, exception.getMessage());
     }
 }

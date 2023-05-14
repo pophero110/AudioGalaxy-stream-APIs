@@ -80,21 +80,41 @@ public class PlaylistService {
     }
 
     /**
-     * Adds a song to a playlist based on the provided playlist ID and song.
+     * Deletes a playlist based on the provided playlist ID.
      *
+     * Retrieves the playlist with the given ID and the ID of the currently logged-in user. If the playlist is found and
+     * belongs to the user, it is deleted from the repository. The deleted playlist is returned.
+     *
+     * @param playlistId The ID of the playlist to be deleted.
+     * @return The deleted playlist.
+     * @throws InformationNotFoundException if the playlist with the given ID is not found or does not belong to the user.
+     */
+    public Playlist deletePlaylistId(Long playlistId) {
+        Optional<Playlist> playlist = playlistRepository.findByIdAndUserId(playlistId, userContext.getCurrentLoggedInUser().getId());
+        if (playlist.isPresent()) {
+            playlistRepository.deleteById(playlistId);
+            return playlist.get();
+        } else {
+            throw new InformationNotFoundException("User's Playlist with id " + playlistId + " is not found");
+        }
+    }
+
+    /**
+     * Adds a song to a playlist based on the provided playlist ID and song.
+     * <p>
      * Checks if the currently logged-in user has the playlist with the given ID. If the playlist is found, it checks if the
      * song with the provided ID exists. If both the playlist and song are found, the song is added to the playlist, and the
      * updated playlist is saved.
      *
      * @param playlistId The ID of the playlist to which the song will be added.
-     * @param song The song to be added to the playlist.
+     * @param song       The song to be added to the playlist.
      * @return The updated playlist after adding the song.
      * @throws InformationNotFoundException if the playlist with the given ID or the song with the given ID is not found.
      */
     public Playlist addSongToPlaylist(Long playlistId, Song song) {
         // check if the user has the playlist
         User currentUser = userContext.getCurrentLoggedInUser();
-        Playlist foundPlaylist = playlistRepository.findByIdAndUser(playlistId, currentUser)
+        Playlist foundPlaylist = playlistRepository.findByIdAndUserId(playlistId, currentUser.getId())
                 .orElseThrow(() -> new InformationNotFoundException("Playlist with id " + playlistId + " is not found"));
 
         // check if the song exists
@@ -104,6 +124,5 @@ public class PlaylistService {
         foundPlaylist.getSongs().add(foundSong);
         return playlistRepository.save(foundPlaylist);
     }
-
 }
 

@@ -8,6 +8,7 @@ import com.audiogalaxy.audiogalaxy.repository.SongRepository;
 import com.audiogalaxy.audiogalaxy.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ import java.util.List;
  * Implements the CommandLineRunner interface to execute the data loading process upon application startup.
  */
 @Component
+@Profile("!test")
 public class UserPlaylistDataLoader implements CommandLineRunner {
 
     final

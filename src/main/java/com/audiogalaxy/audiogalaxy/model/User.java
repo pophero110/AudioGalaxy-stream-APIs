@@ -73,13 +73,14 @@ public class User {
     }
 
     public void setId(Long id) {
-
+        this.id = id;
     }
 
     public void setPlaylists(List<Playlist> playlists) {
         this.playlists = playlists;
     }
 
+    @JsonIgnore
     public List<Playlist> getPlaylists() {
         return playlists;
     }

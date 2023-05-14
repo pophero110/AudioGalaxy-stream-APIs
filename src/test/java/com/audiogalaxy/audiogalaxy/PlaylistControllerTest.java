@@ -123,7 +123,7 @@ public class PlaylistControllerTest {
     @Test
     @DisplayName("return 200 and a list of songs that belong to a playlist")
     public void shouldGetSongsFromPlaylistSuccessfully() throws Exception {
-        when(playlistService.getSongByPlaylistId(anyLong())).thenReturn(Arrays.asList(new Song("album", "song")));
+        when(playlistService.getSongByPlaylistId(anyLong())).thenReturn(List.of(new Song("album", "song")));
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/api/playlists/1/");
 
@@ -143,6 +143,17 @@ public class PlaylistControllerTest {
         mockMvc.perform(mockRequest)
                 .andExpect(status().isNotFound())
                 .andDo(print());
+    }
+
+    @Test
+    @DisplayName("return 200 and playlist that was deleted")
+    public void shouldDeletePlaylistSuccessfully() throws Exception {
+        when(playlistService.deletePlaylistId(anyLong())).thenReturn((playlist));
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.delete("/api/playlists/{playlistId}/", 1);
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -168,8 +179,20 @@ public class PlaylistControllerTest {
     }
 
     @Test
+    @DisplayName("return 404 if playlist is not found")
+    public void shouldDeletePlaylistUnsuccessfully() throws Exception {
+        when(playlistService.deletePlaylistId(anyLong())).thenThrow(new InformationNotFoundException("Playlist with id 1 is not found"));
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.delete("/api/playlists/{playlistId}/", 1);
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
     @DisplayName("add a song to a playlist unsuccessfully when playlist is not found")
-    public void shouldAddSongToPlaylistUnsuccessfullyWhenPlaylistIsNotFound () throws Exception {
+    public void shouldAddSongToPlaylistUnsuccessfullyWhenPlaylistIsNotFound() throws Exception {
         Song song = new Song(1L, "album", "Champion");
         when(playlistService.addSongToPlaylist(anyLong(), Mockito.any(Song.class))).thenThrow(new InformationNotFoundException("Playlist with id 1L is not found"));
 
@@ -193,7 +216,6 @@ public class PlaylistControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(song));
-
         mockMvc.perform(mockRequest)
                 .andExpect(status().isNotFound())
                 .andDo(print());
