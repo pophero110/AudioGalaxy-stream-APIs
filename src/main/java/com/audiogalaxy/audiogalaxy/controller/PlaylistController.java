@@ -74,7 +74,7 @@ public class PlaylistController {
      * song to the playlist to the playlistService's addSongToPlaylist method, passing the playlist ID and the song object.
      *
      * @param playlistId The ID of the playlist to which the song will be added.
-     * @param song       The Song object containing the details of the song to be added.
+     * @param song The Song object containing the details of the song to be added.
      * @return The updated Playlist object after adding the song.
      */
     @PostMapping(path = "/playlists/{playlistId}/songs/")
