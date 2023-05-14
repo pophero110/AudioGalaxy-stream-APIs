@@ -22,7 +22,7 @@ public class PlaylistService {
     private SongRepository songRepository;
 
     @Autowired
-    private void beansInjection(PlaylistRepository playlistRepository, UserContext userContext, SongRepository songRepository) {
+    public PlaylistService(PlaylistRepository playlistRepository, UserContext userContext, SongRepository songRepository) {
         this.playlistRepository = playlistRepository;
         this.userContext = userContext;
         this.songRepository = songRepository;
@@ -81,7 +81,7 @@ public class PlaylistService {
 
     /**
      * Deletes a playlist based on the provided playlist ID.
-     *
+     * <p>
      * Retrieves the playlist with the given ID and the ID of the currently logged-in user. If the playlist is found and
      * belongs to the user, it is deleted from the repository. The deleted playlist is returned.
      *
@@ -127,7 +127,7 @@ public class PlaylistService {
 
     /**
      * Updates the playlist with the specified ID using the data from the provided playlist object.
-     *
+     * <p>
      * Checks if the currently logged-in user has a playlist with the given ID. If the playlist is found, the name and
      * description of the playlist are updated based on the corresponding fields in the playlist object. The updated playlist
      * is then saved and returned.
@@ -155,6 +155,5 @@ public class PlaylistService {
 
         return playlistRepository.save(foundPlaylist);
     }
-
 }
 

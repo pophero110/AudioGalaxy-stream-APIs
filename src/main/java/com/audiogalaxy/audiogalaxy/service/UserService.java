@@ -74,10 +74,10 @@ public class UserService {
 
     /**
      * Authenticates a user based on the provided login credentials and generates a JWT token upon successful authentication.
-     *
+     * <p>
      * The method first retrieves the user from the repository based on the email provided in the login request. If the user exists
      * and is inactive, it throws an InformationNotFoundException indicating that the user account is inactive.
-     *
+     * <p>
      * The method then attempts to authenticate the user by calling the authenticationManager's authenticate method with the provided
      * email and password. If authentication is successful, the user's authentication details are set in the SecurityContextHolder,
      * and a JWT token is generated using the jwtUtils.
@@ -105,7 +105,7 @@ public class UserService {
 
     /**
      * Set the currently logged-in user to inactive status.
-     *
+     * <p>
      * If the user account is currently active, it will be set to inactive by updating the "active" field in the user object.
      * The updated user object is then saved to the user repository.
      *
@@ -139,5 +139,4 @@ public class UserService {
         }
         throw new InformationInvalidException("User name cannot be blank.");
     }
-
 }
