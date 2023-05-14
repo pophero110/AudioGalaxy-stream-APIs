@@ -220,4 +220,60 @@ public class PlaylistControllerTest {
                 .andExpect(status().isNotFound())
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("Should update playlist successfully")
+    public void shouldUpdatePlaylistSuccessfully() throws Exception {
+        Long playlistId = 1L;
+        Playlist playlistObject = new Playlist("Updated Playlist", "Updated Description");
+
+        when(playlistService.updatePlaylist(anyLong(), Mockito.any(Playlist.class))).thenReturn(playlistObject);
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .put("/api/playlists/" + playlistId + "/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(playlistObject));
+
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.name").value(playlistObject.getName()))
+                .andExpect(jsonPath("$.description").value(playlistObject.getDescription()));
+    }
+
+    @Test
+    @DisplayName("Should fail to update playlist when playlist is not found")
+    public void shouldUpdatePlaylistUnsuccessfullyWhenPlaylistIsNotFound() throws Exception {
+        Long playlistId = 1L;
+        Playlist playlistObject = new Playlist("Updated Playlist", "Updated Description");
+
+        when(playlistService.updatePlaylist(anyLong(), Mockito.any(Playlist.class))).thenThrow(new InformationNotFoundException("test"));
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .put("/api/playlists/" + playlistId + "/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(playlistObject));
+
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("Should fail to update playlist when playlist name is blank")
+    public void shouldUpdatePlaylistUnsuccessfullyWhenPlaylistNameIsBlank() throws Exception {
+        Long playlistId = 1L;
+        Playlist playlistObject = new Playlist("Updated Playlist", "Updated Description");
+
+        when(playlistService.updatePlaylist(anyLong(), Mockito.any(Playlist.class))).thenThrow(new InformationInvalidException("test"));
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .put("/api/playlists/" + playlistId + "/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(playlistObject));
+
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
 }
