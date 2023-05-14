@@ -80,6 +80,7 @@ public class User {
         this.playlists = playlists;
     }
 
+    @JsonIgnore
     public List<Playlist> getPlaylists() {
         return playlists;
     }
