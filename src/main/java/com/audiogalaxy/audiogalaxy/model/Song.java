@@ -1,12 +1,14 @@
 package com.audiogalaxy.audiogalaxy.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="songs")
+@Table(name = "songs")
 public class Song {
     @Id
     @Column
@@ -20,6 +22,7 @@ public class Song {
     private String title;
 
     @ManyToMany(mappedBy = "songs")
+    @JsonIgnore
     private List<Playlist> playlists = new ArrayList<>();
 
     public Song() {
