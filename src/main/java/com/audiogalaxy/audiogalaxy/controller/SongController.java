@@ -20,6 +20,14 @@ public class SongController {
         this.songService = songService;
     }
 
+    /**
+     * Retrieves a list of songs.
+     * <p>
+     * This endpoint accepts a GET request and retrieves a list of songs from the song service.
+     * The method delegates the task to the songService's getSongs method and returns the list of songs.
+     *
+     * @return A list of songs.
+     */
     @GetMapping(path = "/songs/")
     public List<Song> getSongs() {
         return songService.getSongs();

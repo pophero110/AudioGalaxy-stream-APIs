@@ -23,7 +23,7 @@ public class Song {
 
     @ManyToMany(mappedBy = "songs")
     @JsonIgnore
-    private List<Playlist> playlists = new ArrayList<>();
+    private final List<Playlist> playlists = new ArrayList<>();
 
     public Song() {
     }

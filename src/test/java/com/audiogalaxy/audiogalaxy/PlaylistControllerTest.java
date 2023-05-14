@@ -224,12 +224,11 @@ public class PlaylistControllerTest {
     @Test
     @DisplayName("Should update playlist successfully")
     public void shouldUpdatePlaylistSuccessfully() throws Exception {
-        Long playlistId = 1L;
         Playlist playlistObject = new Playlist("Updated Playlist", "Updated Description");
 
         when(playlistService.updatePlaylist(anyLong(), Mockito.any(Playlist.class))).thenReturn(playlistObject);
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
-                .put("/api/playlists/" + playlistId + "/")
+                .put("/api/playlists/1/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(playlistObject));
 
@@ -244,12 +243,11 @@ public class PlaylistControllerTest {
     @Test
     @DisplayName("Should fail to update playlist when playlist is not found")
     public void shouldUpdatePlaylistUnsuccessfullyWhenPlaylistIsNotFound() throws Exception {
-        Long playlistId = 1L;
         Playlist playlistObject = new Playlist("Updated Playlist", "Updated Description");
 
         when(playlistService.updatePlaylist(anyLong(), Mockito.any(Playlist.class))).thenThrow(new InformationNotFoundException("test"));
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
-                .put("/api/playlists/" + playlistId + "/")
+                .put("/api/playlists/1/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(playlistObject));
 
@@ -262,12 +260,11 @@ public class PlaylistControllerTest {
     @Test
     @DisplayName("Should fail to update playlist when playlist name is blank")
     public void shouldUpdatePlaylistUnsuccessfullyWhenPlaylistNameIsBlank() throws Exception {
-        Long playlistId = 1L;
         Playlist playlistObject = new Playlist("Updated Playlist", "Updated Description");
 
         when(playlistService.updatePlaylist(anyLong(), Mockito.any(Playlist.class))).thenThrow(new InformationInvalidException("test"));
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
-                .put("/api/playlists/" + playlistId + "/")
+                .put("/api/playlists/1/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(playlistObject));
 
