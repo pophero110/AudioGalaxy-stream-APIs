@@ -202,7 +202,7 @@ public class PlaylistServiceTest {
         InformationNotFoundException exception = Assertions
                 .assertThrows(InformationNotFoundException.class, () -> playlistService.addSongToPlaylist(1L, addedSong));
         String expectedMessage = "Playlist with id 1 is not found";
-        Assertions.assertTrue(exception.getMessage().contains(expectedMessage));
+        Assertions.assertEquals(expectedMessage, exception.getMessage());
     }
 
     @Test
