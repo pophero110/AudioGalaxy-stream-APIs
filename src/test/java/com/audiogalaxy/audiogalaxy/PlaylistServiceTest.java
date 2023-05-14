@@ -150,7 +150,8 @@ public class PlaylistServiceTest {
 
         willDoNothing().given(playlistRepository).deleteById(playlist.getId());
 
-        verify(playlistRepository, times(0)).findById(playlist.getId());
+        verify(playlistRepository, times(1)).deleteById(playlist.getId());
+        Assertions.assertNotNull(actualPlaylist);
     }
 
     @Test
