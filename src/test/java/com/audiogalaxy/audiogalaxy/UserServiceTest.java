@@ -41,24 +41,23 @@ public class UserServiceTest {
     @MockBean
     MyUserDetails myUserDetails;
 
+    User user = new User("tim", "tim@hotmail.com", "tim123");
+
     @Test
     @DisplayName("Password must be converted to jwt token before saving")
     public void passwordMustBeConvertedToJwtTokenBeforeSave() {
-        User user = new User("username", "pam@gmail.com", "123456");
         when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
-        User createUser = userService.createUser(user);
+        User createUser = userService.createUser(user);  // new user
         Assertions.assertNotEquals(createUser.getPassword(), "123456");
         verify(userRepository, times(1)).save(Mockito.any(User.class));
-
     }
 
     @Test
     @DisplayName("login user unsuccessfully when user account is inactive")
     public void userAccountMustBeActiveToLogin() {
-        User inActiveUser = new User("tim", "tim@hotmail.com", "tim123");
-        inActiveUser.setActive(false);
+        user.setActive(false); // inactivate user
         LoginRequest loginRequest = new LoginRequest("tim@hotmail.com", "tim123");
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(inActiveUser));
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
 
         Assertions.assertThrows(InformationNotFoundException.class, () -> userService.loginUser(loginRequest));
     }
@@ -66,21 +65,19 @@ public class UserServiceTest {
     @Test
     @DisplayName("Deactivate user account when user account is active")
     public void testDeactivateUserAccountSuccessfully() {
-        User activeUser = new User("tim", "tim@hotmail.com", "tim123");
-        activeUser.setActive(true);
-        when(userContext.getCurrentLoggedInUser()).thenReturn(activeUser);
+        user.setActive(true);   // active user
+        when(userContext.getCurrentLoggedInUser()).thenReturn(user);
 
         ResponseEntity<?> response = userService.setUserToInactive();
         Assertions.assertEquals(200, response.getStatusCodeValue());
-        Assertions.assertFalse(activeUser.getActive());
+        Assertions.assertFalse(user.getActive());
     }
 
     @Test
     @DisplayName("Deactivate user account throws an exception when user account is inactive")
     public void testDeactivateUserAccountUnsuccessfully() {
-        User activeUser = new User("tim", "tim@hotmail.com", "tim123");
-        activeUser.setActive(false);
-        when(userContext.getCurrentLoggedInUser()).thenReturn(activeUser);
+        user.setActive(false);   // currently logged-in user
+        when(userContext.getCurrentLoggedInUser()).thenReturn(user);
 
         Assertions.assertThrows(InformationNotFoundException.class, () -> userService.setUserToInactive());
     }
@@ -88,11 +85,11 @@ public class UserServiceTest {
     @Test
     @DisplayName("check if user is not blank")
     public void updateUserNameNotBlank() {
-        User currentLoggedUser = new User("tim", "tim@hotmail.com", "tim123");
-        when(userContext.getCurrentLoggedInUser()).thenReturn(currentLoggedUser);
+        // currently logged-in user
+        when(userContext.getCurrentLoggedInUser()).thenReturn(user);
         User userObject = new User();
-        userObject.setName("mark");
-        when(userRepository.save(Mockito.any(User.class))).thenReturn(currentLoggedUser);
+        userObject.setName("mark");  // new user
+        when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
         User returnUser = userService.updateUsername(userObject);
 
         Assertions.assertEquals("mark", returnUser.getName());
@@ -101,11 +98,11 @@ public class UserServiceTest {
     @Test
     @DisplayName("check if user is a valid username")
     public void updateUserNameIsValid() {
-        User currentLoggedUser = new User("tim", "tim@hotmail.com", "tim123");
-        when(userContext.getCurrentLoggedInUser()).thenReturn(currentLoggedUser);
-        User userObject = new User();
+        // logged-in user
+        when(userContext.getCurrentLoggedInUser()).thenReturn(user);
+        User userObject = new User();  // new user
         userObject.setName("");
-        when(userRepository.save(Mockito.any(User.class))).thenReturn(currentLoggedUser);
+        when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
 
         Assertions.assertThrows(InformationInvalidException.class, () -> userService.updateUsername(userObject));
     }
