@@ -14,7 +14,7 @@ A Streaming Music App That Is Out of This World!
 - [Favorite Parts](#favorite-parts)
 - [Wins & Hurdles](#wins--hurdles)
 - [Technologies & Tools](#technologies--tools)
-- [Works Sited](#works-sited)
+- [Credits](#credits)
 
 ***
 
@@ -294,8 +294,10 @@ As a team, we encountered the following list of hurdles during this project.
 
 ***
 
-## Works Sited
+## Credits
 
-We utilized this [tool](https://app.diagrams.net/) for creating ERD
+- We utilized this [tool](https://app.diagrams.net/) for creating ERD
 diagrams - [Google Diagrams](https://app.diagrams.net/)<br>
-We were inspired by [Spotify](http://spotify.com) for our app.
+- We were inspired by [Spotify](http://spotify.com) for our app.
+- A huge thanks to Suresh, Dhrubo and Leo who share their feedback and suggestion at the beginning of the project
+- Shout-out to my teammate for their patience, kindness and hard-work during the development of the project
