@@ -291,6 +291,8 @@ As a team, we encountered the following list of hurdles during this project.
 - GitHub Project
 - Draw.io
 - H2 Database
+- JUnit
+- Mockito
 
 ***
 
