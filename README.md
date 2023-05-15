@@ -299,5 +299,10 @@ As a team, we encountered the following list of hurdles during this project.
 - We utilized this [tool](https://app.diagrams.net/) for creating ERD
 diagrams - [Google Diagrams](https://app.diagrams.net/)<br>
 - We were inspired by [Spotify](http://spotify.com) for our app.
+
+### Jeff
 - A huge thanks to Suresh, Dhrubo and Leo who share their feedback and suggestion at the beginning of the project
 - Shout-out to my teammate for their patience, kindness and hard-work during the development of the project
+
+### Pam
+- I would like to thank Jeff for taking charge on this project with his stellar ability of planning and management.  I would like to thank both team members for their patience and help, it was a true pleasure working with both of you
