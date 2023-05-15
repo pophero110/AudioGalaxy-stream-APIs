@@ -303,7 +303,7 @@ diagrams - [Google Diagrams](https://app.diagrams.net/)<br>
 - We were inspired by [Spotify](http://spotify.com) for our app.
 
 ### Jeff
-- A huge thanks to Suresh, Dhrubo and Leo who shared their feedback and suggestion at the beginning of the project
+- A huge thanks to [Suresh](https://github.com/sureshmelvinsigera), [Dhrubo](https://www.linkedin.com/in/dhrubo-hasan/) and [Leo](https://www.linkedin.com/in/leonardo-rodriguez/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3BiDOQ1nARTqWp8%2BgRo7bF6Q%3D%3D) who shared their feedback and suggestion at the beginning of the project
 - Shout-out to my teammates for their patience, kindness, and hard work during the development of the project
 
 ### Pam
