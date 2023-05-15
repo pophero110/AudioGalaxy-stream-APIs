@@ -134,13 +134,12 @@ public class UserControllerTest {
     @Test
     @DisplayName("when login successfully should return 200 and a token")
     public void shouldLoginSuccessfully() throws Exception {
-        User loginRequest = new User("tim", "tim@hotmail.com", "tim123");
         when(userService.loginUser(Mockito.any(LoginRequest.class))).thenReturn(new LoginResponse("token"));
 
         MockHttpServletRequestBuilder mockRequest = post(endpoint + "login/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(loginRequest));
+                .content(mapper.writeValueAsString(user_1));
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
@@ -152,13 +151,12 @@ public class UserControllerTest {
     @Test
     @DisplayName("when user login unsuccessfully should return 400")
     public void shouldLoginUnSuccessfully() throws Exception {
-        User loginRequest = new User("tim", "tim@hotmail.com", "tim123");
         when(userService.loginUser(Mockito.any(LoginRequest.class))).thenThrow(new InformationInvalidException("User not valid"));
 
         MockHttpServletRequestBuilder mockRequest = post(endpoint + "login/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(loginRequest));
+                .content(mapper.writeValueAsString(user_1));
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isBadRequest())
@@ -168,13 +166,12 @@ public class UserControllerTest {
     @Test
     @DisplayName("should login unsuccessfully when user account is inactive")
     public void shouldLoginUnSuccessfullyWhenUserIsInactive() throws Exception {
-        User loginRequest = new User("tim", "tim@hotmail.com", "tim123");
         when(userService.loginUser(Mockito.any(LoginRequest.class))).thenThrow(new InformationNotFoundException("The user account is inactive"));
 
         MockHttpServletRequestBuilder mockRequest = post(endpoint + "login/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(loginRequest));
+                .content(mapper.writeValueAsString(user_1));
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isNotFound())
